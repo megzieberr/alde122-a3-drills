@@ -1,0 +1,977 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referencing and Cohesion Drill</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F8;
+    --card: #FFFFFF;
+    --ink: #22303C;
+    --muted: #5B6B78;
+    --line: #D8DFE5;
+    --accent: #0E7C7B;
+    --accent-soft: #E1F0EF;
+    --good: #2F7D4C;
+    --good-bg: #E4F3E9;
+    --bad: #C2453F;
+    --bad-bg: #FAE8E6;
+    --rule-bg: #FBF3DC;
+    --rule-ink: #7A5A12;
+    --quote-bg: #F0F3F5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141A20;
+      --card: #1D2530;
+      --ink: #E7ECF1;
+      --muted: #9AA8B4;
+      --line: #32404D;
+      --accent: #5BC6C2;
+      --accent-soft: #1E3434;
+      --good: #6CC58D;
+      --good-bg: #1E3327;
+      --bad: #E08078;
+      --bad-bg: #3A2320;
+      --rule-bg: #332B14;
+      --rule-ink: #E3C77E;
+      --quote-bg: #171E26;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141A20;
+    --card: #1D2530;
+    --ink: #E7ECF1;
+    --muted: #9AA8B4;
+    --line: #32404D;
+    --accent: #5BC6C2;
+    --accent-soft: #1E3434;
+    --good: #6CC58D;
+    --good-bg: #1E3327;
+    --bad: #E08078;
+    --bad-bg: #3A2320;
+    --rule-bg: #332B14;
+    --rule-ink: #E3C77E;
+    --quote-bg: #171E26;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Public Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 16px 16px 40px;
+    overflow-wrap: break-word;
+  }
+  em { font-style: italic; }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header { margin: 8px 0 12px; }
+  h1 {
+    font-family: "Zilla Slab", Georgia, serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0 0 2px;
+    text-wrap: balance;
+  }
+  .bar-line { color: var(--muted); font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; }
+  .map { display: flex; flex-wrap: wrap; gap: 5px; margin: 12px 0 14px; }
+  .map button {
+    width: 34px; height: 30px;
+    border-radius: 7px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    font: inherit; font-size: 0.8rem; font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+  }
+  .map button.cur { border-color: var(--accent); color: var(--ink); }
+  .map button.good { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+  .map button.bad { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 18px 20px;
+    margin-bottom: 14px;
+  }
+  .part {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 2px;
+  }
+  .qno {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 8px;
+  }
+  .instr { margin: 0 0 10px; font-size: 0.95rem; }
+  .stem {
+    background: var(--quote-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 12px;
+    margin: 0 0 4px;
+    font-family: "Zilla Slab", Georgia, serif;
+    font-weight: 600; font-size: 1.05rem; line-height: 1.4;
+  }
+  .qtext {
+    font-family: "Zilla Slab", Georgia, serif;
+    font-weight: 600; font-size: 1.08rem; line-height: 1.4;
+    margin: 12px 0 8px;
+  }
+
+  /* reference entries: quiet block, real italics, long URLs wrap */
+  .entry {
+    background: var(--quote-bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 0 0 4px;
+    font-size: 0.98rem; line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+  .src {
+    border: 1.5px dashed var(--line);
+    border-radius: 8px;
+    padding: 8px 12px 10px;
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+  }
+  .src-h, .para-h {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 6px;
+  }
+  .src dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 3px 14px; margin: 0; }
+  .src dt { color: var(--muted); font-weight: 600; }
+  .src dd { margin: 0; overflow-wrap: anywhere; }
+  .para {
+    background: var(--quote-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 8px 12px 10px;
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+  }
+  .para p { margin: 0; }
+  .para .para-h { margin-bottom: 4px; }
+  .gap {
+    display: inline-block;
+    border: 1.5px dashed var(--accent); border-radius: 6px;
+    padding: 0 8px; color: var(--accent);
+    font-size: 0.82rem; font-weight: 700;
+  }
+  .stmts {
+    list-style: none; margin: 0 0 4px; padding: 10px 12px;
+    background: var(--quote-bg); border-radius: 8px; font-size: 0.95rem;
+  }
+  .stmts li { margin: 0 0 6px; display: flex; gap: 8px; }
+  .stmts li:last-child { margin-bottom: 0; }
+  .stmts .rn { flex: 0 0 2em; font-weight: 700; }
+
+  .opts { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    width: 100%; text-align: left;
+    background: var(--card); color: var(--ink);
+    border: 1.5px solid var(--line); border-radius: 10px;
+    padding: 10px 12px;
+    font: inherit; font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt .letter {
+    flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1.5px solid var(--line); font-weight: 700; font-size: 0.85rem; margin-top: 1px;
+  }
+  .opt .body { min-width: 0; padding-top: 2px; overflow-wrap: anywhere; }
+  .eline { display: block; padding: 0 0 6px; }
+  .eline + .eline { border-top: 1px dotted var(--line); padding-top: 6px; }
+  .eline:last-child { padding-bottom: 0; }
+  .opt.picked-good { border-color: var(--good); background: var(--good-bg); }
+  .opt.picked-good .letter { border-color: var(--good); color: var(--good); }
+  .opt.picked-bad { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.picked-bad .letter { border-color: var(--bad); color: var(--bad); }
+  .opt.reveal { border-color: var(--good); border-style: dashed; }
+  .opt.reveal .letter { border-color: var(--good); color: var(--good); }
+  .feedback { margin-top: 14px; }
+  .verdict { font-family: "Zilla Slab", Georgia, serif; font-weight: 700; font-size: 1.05rem; margin: 0 0 8px; }
+  .verdict.good { color: var(--good); }
+  .verdict.bad { color: var(--bad); }
+  .why { font-size: 0.92rem; margin: 0 0 8px; }
+  .whylist { margin: 0 0 10px; padding: 0; list-style: none; font-size: 0.9rem; }
+  .whylist li { padding: 6px 8px; border-radius: 8px; margin-bottom: 4px; }
+  .whylist li.key { background: var(--good-bg); }
+  .whylist li.mine { outline: 1.5px solid var(--bad); }
+  .whylist li.mine.key { outline-color: var(--good); }
+  .whylist .tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-left: 6px; }
+  .whylist .tag.k { color: var(--good); }
+  .whylist .tag.m { color: var(--bad); }
+  .rule {
+    background: var(--rule-bg); color: var(--rule-ink);
+    border-radius: 8px; padding: 9px 12px;
+    font-size: 0.9rem; font-weight: 600;
+  }
+  .rule::before { content: "Rule: "; font-weight: 700; }
+  .nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .nav .spacer { flex: 1; }
+  .btn {
+    background: var(--accent); color: var(--card);
+    border: none; border-radius: 10px;
+    padding: 10px 20px;
+    font: inherit; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+  .btn:disabled { opacity: 0.45; cursor: default; }
+  .score {
+    font-family: "Zilla Slab", Georgia, serif; font-weight: 700;
+    font-size: 2.4rem; margin: 6px 0 0; font-variant-numeric: tabular-nums;
+  }
+  .scoreline { color: var(--muted); margin: 2px 0 12px; }
+  .rev-h {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 18px 0 8px;
+  }
+  .missrules { margin: 0 0 6px; padding: 0; list-style: none; }
+  .missrules li {
+    background: var(--rule-bg); color: var(--rule-ink);
+    border-radius: 8px; padding: 8px 12px; margin-bottom: 6px;
+    font-size: 0.9rem; font-weight: 600;
+  }
+  .missrules .qn { font-weight: 700; margin-right: 4px; }
+  .missrules-none { margin: 0 0 6px; font-size: 0.95rem; }
+  .rcard { border-left: 4px solid var(--good); }
+  .rcard.miss { border-left-color: var(--bad); }
+  .rcard .got { float: right; font-weight: 700; font-size: 0.85rem; font-variant-numeric: tabular-nums; color: var(--good); }
+  .rcard.miss .got { color: var(--bad); }
+  .save-status { color: var(--muted); font-size: 0.8rem; margin: 10px 0 0; }
+  .start p { margin: 0 0 10px; }
+  .lect { font-size: 0.95rem; background: var(--quote-bg); border-radius: 8px; padding: 10px 12px; }
+  .lect p:last-child { margin-bottom: 0; }
+  .habit {
+    margin: 12px 0; background: var(--rule-bg); color: var(--rule-ink);
+    border-radius: 8px; padding: 10px 12px; font-size: 0.95rem;
+  }
+  .unans { color: var(--bad); font-weight: 700; }
+  [hidden] { display: none !important; }
+  @media (max-width: 420px) {
+    .src dl { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .src dd { margin-bottom: 5px; }
+  }
+</style>
+
+<div class="wrap" id="wrapEl">
+  <header>
+    <h1>Referencing and Cohesion</h1>
+    <div class="bar-line" id="barLine">
+      <span>ALDE122 semester test prep · 24 questions · 24 marks</span>
+    </div>
+  </header>
+
+  <!-- START -->
+  <div class="card start" id="startCard">
+    <p class="qno">Before you start</p>
+    <div class="lect">
+      <p>This drill covers the referencing and cohesion part of the semester test: naming a source from its fingerprint, picking the correct NWU Harvard entry, in-text citations, using sources fairly, and cohesion (a bare "This", connectors and transition sentences).</p>
+      <p><b>24 questions, 1 mark each, about 25 minutes.</b> Every source in it is invented.</p>
+    </div>
+    <div class="habit">The most useful habit: <b>Find the fingerprint first.</b> Place: Publisher = book. volume(issue):pages = journal article. URL + Date of access = web page. In: + eds. = chapter.</div>
+    <p>Tap an answer and the explanation appears straight away. No timer. Italics in an entry are part of the answer, so look at them closely.</p>
+    <div class="nav">
+      <span class="spacer"></span>
+      <button class="btn" id="startBtn">Start the drill</button>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="qArea" hidden>
+    <div class="map" id="map"></div>
+    <div class="card" id="qCard">
+      <p class="part" id="qPart"></p>
+      <p class="qno" id="qNo"></p>
+      <div id="qBody"></div>
+      <div class="feedback" id="feedback" hidden></div>
+      <div class="nav">
+        <button class="btn ghost" id="backBtn">Back</button>
+        <span class="spacer"></span>
+        <button class="btn" id="nextBtn">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resArea" hidden>
+    <div class="card">
+      <p class="qno" id="resMode">Drill marks</p>
+      <div id="missRules"></div>
+      <p class="score" id="scoreBig"></p>
+      <p class="scoreline" id="scoreLine"></p>
+      <p class="save-status" id="saveStatus"></p>
+      <div class="nav">
+        <span class="spacer"></span>
+        <button class="btn ghost" id="drillBtn">Run the drill again</button>
+      </div>
+    </div>
+    <p class="rev-h" id="missH">Missed first</p>
+    <div id="missList"></div>
+    <p class="rev-h" id="hitH">Right</p>
+    <div id="hitList"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var LETTERS = ["A", "B", "C", "D"];
+  var ROMAN = ["I", "II", "III", "IV", "V"];
+
+  // Question data rules: plain text only. The ONE markup allowed is <em>...</em> (real italics).
+  // Every source below is invented.
+
+  var PA = "Part A · Name the source type";
+  var PB = "Part B · Pick the correct entry";
+  var PC = "Part C · In-text citations";
+  var PD = "Part D · Using sources";
+  var PE = "Part E · Cohesion";
+
+  var TYPE_Q = `Which type of source does this entry describe?`;
+  var ENTRY_Q = `Which reference-list entry is correct in NWU Harvard?`;
+
+  var T_BOOK = `A book`;
+  var T_JOURNAL = `A journal article`;
+  var T_WEB = `A web page`;
+  var T_CHAPTER = `A chapter in an edited book`;
+
+  var AND_RULE = `"and" has exactly ONE home: author names inside your running sentence. Everywhere else (inside brackets, in the reference list) it is &.`;
+  var TRANSITION_RULE = `A transition sentence looks BACK at the last paragraph and FORWARD to the next one. Test each option: does it do both?`;
+  var CONNECTOR_RULE = `Check the connector's DIRECTION first: contrast (However, On the other hand), addition (Furthermore, In addition), result (Therefore) or example (For example).`;
+
+  var QUESTIONS = [
+    // ---------- Part A: name the source type ----------
+    {
+      qid: "rca1", part: PA, kind: "journal",
+      entry: `Mabuza, T.L. & Fourie, J. 2022. Reading aloud in Grade 3: what teachers notice. <em>Highveld Journal of Education</em>, 14(2):45-61.`,
+      q: TYPE_Q,
+      opts: [
+        { t: T_BOOK, why: `A book has Place: Publisher after its title. This entry has no place and no publisher.` },
+        { t: T_WEB, why: `A web page ends with a URL and Date of access. There is no URL here.` },
+        { t: T_JOURNAL, why: `The fingerprint is 14(2):45-61: volume, issue in brackets, then the pages after the colon. The italics sit on the journal, <em>Highveld Journal of Education</em>.` },
+        { t: T_CHAPTER, why: `A chapter has In: + the editors + eds. + pp. None of those is here.` }
+      ],
+      key: 2,
+      rule: `Journal article fingerprint: volume(issue):pages, and never a place or publisher. The italics sit on the journal title.`
+    },
+    {
+      qid: "rca2", part: PA, kind: "chapter",
+      entry: `Ndlovu, S.P. 2020. Code-switching in the Foundation Phase. In: Pillay, R. & Jacobs, M., eds. <em>Language in the early years: a South African reader</em>. Cape Town: Marula Academic. pp. 88-104.`,
+      q: TYPE_Q,
+      opts: [
+        { t: T_CHAPTER, why: `In: then the editors with eds., then pp. for the chapter's pages. Two layers: the chapter before In:, the book after it.` },
+        { t: T_JOURNAL, why: `There are page numbers, but pp. 88-104 is not volume(issue):pages. A journal article never has Place: Publisher either.` },
+        { t: T_BOOK, why: `Close, because Cape Town: Marula Academic is a book fingerprint. But In: + eds. + pp. means one chapter inside the book was used, so the entry describes the chapter.` },
+        { t: T_WEB, why: `No URL and no Date of access.` }
+      ],
+      key: 0,
+      rule: `Chapter fingerprint: In: + editors + eds. + pp. Everything before In: is the chapter; everything after it is the book.`
+    },
+    {
+      qid: "rca3", part: PA, kind: "web",
+      entry: `FPRI (Foundation Phase Reading Institute). 2025. <em>Reading for meaning at home</em>. https://www.fpri.org.za/resources/reading-at-home Date of access: 12 Aug. 2026.`,
+      q: TYPE_Q,
+      opts: [
+        { t: T_BOOK, why: `The title is in italics, as a book title would be. But there is no Place: Publisher. A URL + Date of access is the web fingerprint.` },
+        { t: T_CHAPTER, why: `No In:, no eds. and no pp.` },
+        { t: T_JOURNAL, why: `No volume(issue):pages anywhere.` },
+        { t: T_WEB, why: `A URL straight after the title, then Date of access: and the day it was read. No full stop after the URL.` }
+      ],
+      key: 3,
+      rule: `Web page fingerprint: URL + Date of access:, with no full stop after the URL.`
+    },
+
+    // ---------- Part B: pick the correct entry ----------
+    {
+      qid: "rcb1", part: PB, kind: "book",
+      details: [["Author", "Lerato Kgomotso Mahlangu"], ["Year", "2021"], ["Title", "Teaching reading in rural schools: a practical guide"], ["Place", "Pretoria"], ["Publisher", "Baobab Academic Press"]],
+      q: ENTRY_Q,
+      opts: [
+        { t: `Mahlangu, L.K. (2021). <em>Teaching reading in rural schools: a practical guide</em>. Pretoria: Baobab Academic Press.`, why: `(2021) in brackets is APA. NWU Harvard writes the year bare, followed by a full stop: 2021.` },
+        { t: `Mahlangu, L.K. 2021. <em>Teaching Reading in Rural Schools: A Practical Guide</em>. Pretoria: Baobab Academic Press.`, why: `Title Case. NWU Harvard capitalises only the first word and names, and the subtitle after the colon starts with a small letter.` },
+        { t: `Mahlangu, L.K. 2021. <em>Teaching reading in rural schools: a practical guide</em>. Pretoria: Baobab Academic Press.`, why: `Surname, initials. Bare year. <em>Title</em> in italics and sentence case. Place: Publisher. Every slot is right.` },
+        { t: `Mahlangu, L.K. 2021. <em>Teaching reading in rural schools: a practical guide</em>. Baobab Academic Press: Pretoria.`, why: `Publisher before place. Read the colon as "in": in Pretoria, Baobab Academic Press published it. Place first, then publisher.` }
+      ],
+      key: 2,
+      rule: `Book: Surname, I. Year. <em>Title in sentence case</em>. Place: Publisher. No brackets round the year.`
+    },
+    {
+      qid: "rcb2", part: PB, kind: "journal",
+      details: [["Authors", "Thandeka Precious Zwane and Johan Erasmus"], ["Year", "2023"], ["Article title", "Peer feedback in first-year academic writing"], ["Journal", "Southern African Review of Literacy"], ["Volume", "27"], ["Issue", "3"], ["Pages", "110-125"]],
+      q: ENTRY_Q,
+      opts: [
+        { t: `Zwane, T.P. & Erasmus, J. 2023. <em>Peer feedback in first-year academic writing</em>. Southern African Review of Literacy, 27(3):110-125.`, why: `Italics on the wrong title. Use the findable-object test: a librarian can hand you the journal, not one article inside it. Italics travel with volume(issue):pages, so they go on <em>Southern African Review of Literacy</em>.` },
+        { t: `Zwane, T.P. & Erasmus, J. 2023. Peer feedback in first-year academic writing. <em>Southern African Review of Literacy</em>, 27(3):110-125.`, why: `Authors inverted and joined with &, bare year, plain article title, italic journal title, then 27(3):110-125 with no space after the colon.` },
+        { t: `Zwane, T.P. and Erasmus, J. 2023. Peer feedback in first-year academic writing. <em>Southern African Review of Literacy</em>, 27(3):110-125.`, why: `"and" between the authors. The reference list always uses &. "and" only lives inside your running sentence.` },
+        { t: `Zwane, T.P. & Erasmus, J. 2023. Peer feedback in first-year academic writing. <em>Southern African Review of Literacy</em>, 27(3): 110-125.`, why: `A space after the colon: 27(3): 110-125. NWU Harvard writes 27(3):110-125, with no space.` }
+      ],
+      key: 1,
+      rule: `Journal article: italics on the JOURNAL, the thing a librarian could hand you. Italics travel with volume(issue):pages.`
+    },
+    {
+      qid: "rcb3", part: PB, kind: "web",
+      details: [["Author", "National Reading Coalition Trust (NRCT), an organisation"], ["Year", "2025"], ["Page title", "Home reading guidelines for parents"], ["URL", "https://www.nrct.org.za/guides/home-reading"], ["Date accessed", "14 February 2026"]],
+      q: ENTRY_Q,
+      opts: [
+        { t: `NRCT (National Reading Coalition Trust). 2025. <em>Home reading guidelines for parents</em>. https://www.nrct.org.za/guides/home-reading Date of access: 14 Feb. 2026.`, why: `Organisation abbreviation with the full name in brackets, bare year, page title, then the URL with no full stop, straight into Date of access: 14 Feb. 2026.` },
+        { t: `NRCT (National Reading Coalition Trust). 2025. <em>Home reading guidelines for parents</em>. [Online]. Available at: https://www.nrct.org.za/guides/home-reading [Accessed 14 Feb. 2026].`, why: `A different Harvard dialect: [Online]. Available at: ... [Accessed ...]. NWU Harvard has no [Online], no "Available at" and no square brackets: just the URL, then Date of access:.` },
+        { t: `NRCT (National Reading Coalition Trust). 2025. <em>Home reading guidelines for parents</em>. https://www.nrct.org.za/guides/home-reading`, why: `No date of access. A web page can change or disappear, so NWU Harvard records the day you read it. Only a DOI or a permanent link may leave it out.` },
+        { t: `NRCT (National Reading Coalition Trust). 2025. <em>Home reading guidelines for parents</em>. Retrieved from https://www.nrct.org.za/guides/home-reading. Date of access: 14 Feb. 2026.`, why: `Two slips: "Retrieved from" is APA wording, and the full stop after the URL breaks the link. NWU Harvard puts nothing in front of the URL and no full stop after it.` }
+      ],
+      key: 0,
+      rule: `Web page: Author. Year. Title. URL Date of access: 14 Feb. 2026. No [Online], no "Available at", no full stop after the URL.`
+    },
+    {
+      qid: "rcb4", part: PB, kind: "chapter",
+      details: [["Chapter author", "Kagiso Daniel Molefe"], ["Year", "2019"], ["Chapter title", "Assessment for learning in large classes"], ["Editors", "Anika Venter and Bongani Mandla Sithole"], ["Book title", "Teaching in crowded classrooms: lessons from South Africa"], ["Place", "Johannesburg"], ["Publisher", "Kalahari Academic"], ["Chapter pages", "41-58"]],
+      q: ENTRY_Q,
+      opts: [
+        { t: `Molefe, K.D. 2019. Assessment for learning in large classes. Venter, A. & Sithole, B.M., eds. <em>Teaching in crowded classrooms: lessons from South Africa</em>. Johannesburg: Kalahari Academic. pp. 41-58.`, why: `In: is missing. In: is the hinge of a chapter entry: it tells the reader that the chapter sits inside a bigger book.` },
+        { t: `Molefe, K.D. 2019. <em>Assessment for learning in large classes</em>. In: Venter, A. & Sithole, B.M., eds. Teaching in crowded classrooms: lessons from South Africa. Johannesburg: Kalahari Academic. pp. 41-58.`, why: `Italics on the chapter title. The librarian hands you the BOOK, so the book title is italic and the chapter title stays plain.` },
+        { t: `Venter, A. & Sithole, B.M., eds. 2019. Assessment for learning in large classes. In: <em>Teaching in crowded classrooms: lessons from South Africa</em>. Johannesburg: Kalahari Academic. pp. 41-58.`, why: `The entry starts with the editors, and Molefe has disappeared. You used Molefe's chapter, so Molefe goes first. The editors come after In:, followed by eds.` },
+        { t: `Molefe, K.D. 2019. Assessment for learning in large classes. In: Venter, A. & Sithole, B.M., eds. <em>Teaching in crowded classrooms: lessons from South Africa</em>. Johannesburg: Kalahari Academic. pp. 41-58.`, why: `Chapter author, year, plain chapter title, In:, editors with eds., italic book title, Place: Publisher, then pp. for the chapter's pages.` }
+      ],
+      key: 3,
+      rule: `Chapter: the CHAPTER author goes first. In: is the hinge: chapter details before it; editors, eds., <em>book title</em>, Place: Publisher and pp. after it.`
+    },
+    {
+      qid: "rcb5", part: PB, kinds: ["book", "journal", "web"],
+      instr: `Each set lists the same three sources: a book, a journal article and a web page. Only the format changes.`,
+      q: `Which SET of three entries is correct in NWU Harvard?`,
+      opts: [
+        { t: [
+            `Pretorius, Anna Marie (2020). <em>Writing at university: a guide for first-year students</em>. Stellenbosch: Fynbos Press.`,
+            `Govender, Sanjay & Khumalo, Nomsa Thandi (2023). Student voice in tutorial programmes. <em>Southern African Journal of Tutoring</em>, 27(3), pp. 110-125.`,
+            `CTLF (Centre for Teaching and Learning Futures) (2024). <em>Supporting first-year writers</em>. https://www.ctlf.org.za/first-year-writers Date of access: 3 Sep. 2026.`
+          ], why: `Full first names, years in brackets and pp. are APA habits. NWU Harvard uses initials, a bare year and 27(3):110-125. The very first entry breaks the format, so the whole set dies.` },
+        { t: [
+            `Pretorius, A.M. 2020. <em>Writing at university: a guide for first-year students</em>. Stellenbosch: Fynbos Press.`,
+            `Govender, S. & Khumalo, N.T. 2023. <em>Student voice in tutorial programmes</em>. Southern African Journal of Tutoring, 27(3):110-125.`,
+            `CTLF (Centre for Teaching and Learning Futures). 2024. <em>Supporting first-year writers</em>. https://www.ctlf.org.za/first-year-writers Date of access: 3 Sep. 2026.`
+          ], why: `The book and the web page are right, but in the journal entry the article title is italic and the journal is plain. Italics go on the journal, the thing a librarian could hand you.` },
+        { t: [
+            `Pretorius, A.M. 2020. <em>Writing at university: a guide for first-year students</em>. Stellenbosch: Fynbos Press.`,
+            `Govender, S. & Khumalo, N.T. 2023. Student voice in tutorial programmes. <em>Southern African Journal of Tutoring</em>, 27(3):110-125.`,
+            `CTLF (Centre for Teaching and Learning Futures). 2024. <em>Supporting first-year writers</em>. https://www.ctlf.org.za/first-year-writers Date of access: 3 Sep. 2026.`
+          ], why: `Every fingerprint holds: initials and bare years, Place: Publisher, italic journal with 27(3):110-125, and a URL that runs straight into Date of access: with no full stop.` },
+        { t: [
+            `Pretorius, A.M. 2020. <em>Writing at university: a guide for first-year students</em>. Stellenbosch: Fynbos Press.`,
+            `Govender, S. & Khumalo, N.T. 2023. Student voice in tutorial programmes. <em>Southern African Journal of Tutoring</em>, 27(3): 110-125.`,
+            `CTLF (Centre for Teaching and Learning Futures). 2024. <em>Supporting first-year writers</em>. [Online]. Available at: https://www.ctlf.org.za/first-year-writers [Accessed 3 Sep. 2026].`
+          ], why: `The book is fine, but the journal has a space after the colon, 27(3): 110-125, and the web page uses the [Online]. Available at: ... [Accessed ...] dialect. NWU Harvard has neither.` }
+      ],
+      key: 2,
+      rule: `Check one FORMAT fingerprint at a time (year, Place: Publisher, italics, volume(issue):pages, URL + Date of access) and kill a whole set at its first break.`
+    },
+    {
+      qid: "rcb6", part: PB, kind: "book",
+      details: [["Authors, in this order", "Zanele Mthembu, Thabo Mokoena and Riana Naidoo"], ["Year", "2024"], ["Title", "Multilingual classrooms: a guide for new teachers"], ["Place", "Durban"], ["Publisher", "Coastal Academic Press"]],
+      q: ENTRY_Q,
+      opts: [
+        { t: `Mthembu, Z., Mokoena, T. & Naidoo, R. 2024. <em>Multilingual classrooms: a guide for new teachers</em>. Durban: Coastal Academic Press.`, why: `All three authors, each surname first, a comma between the first two and & before the last one. The year follows with no brackets.` },
+        { t: `Mthembu, Z., Mokoena, T. and Naidoo, R. 2024. <em>Multilingual classrooms: a guide for new teachers</em>. Durban: Coastal Academic Press.`, why: `"and" before the last author. In the reference list it is always &.` },
+        { t: `Mthembu, Z. <em>et al</em>. 2024. <em>Multilingual classrooms: a guide for new teachers</em>. Durban: Coastal Academic Press.`, why: `<em>et al</em>. belongs in the in-text citation only. The reference list names every author (up to seven).` },
+        { t: `Mthembu, Z., T. Mokoena & Naidoo, R. 2024. <em>Multilingual classrooms: a guide for new teachers</em>. Durban: Coastal Academic Press.`, why: `T. Mokoena is not inverted. Every author in the list is surname first: Mokoena, T.` }
+      ],
+      key: 0,
+      rule: `Reference list: name ALL the authors (up to seven), each as Surname, I., with & before the last. <em>et al</em>. is for the in-text citation only.`
+    },
+    {
+      qid: "rcb7", part: PB, kind: "journal",
+      entry: `Ngubane, N.P. & Petersen, L. (2022). Homework clubs and reading progress. <em>Karoo Journal of Teacher Education</em>, 9(1):23-39.`,
+      q: `This entry has ONE error. What is it?`,
+      opts: [
+        { t: `The year must not be in brackets.`, why: `NWU Harvard writes the year bare, followed by a full stop: Ngubane, N.P. & Petersen, L. 2022. A year in brackets, (2022), is APA.` },
+        { t: `The journal title should not be in italics.`, why: `The journal title SHOULD be italic. It is the findable object, and it sits right next to 9(1):23-39.` },
+        { t: `The & between the authors should be "and".`, why: `The reference list always uses &. "and" only appears when names sit inside your running sentence.` },
+        { t: `The pages need pp. in front of them.`, why: `Journal pages follow the colon with no pp.: 9(1):23-39. pp. belongs in a chapter entry.` }
+      ],
+      key: 0,
+      rule: `Year in the reference list: bare, then a full stop (2022.). Brackets round the year are APA.`
+    },
+
+    // ---------- Part C: in-text citations ----------
+    {
+      qid: "rcc1", part: PC,
+      stem: `You use page 44 of a 2021 article by Dlamini and Nkosi. You want their names IN your sentence.`,
+      q: `Which sentence is correct?`,
+      opts: [
+        { t: `Dlamini & Nkosi (2021:44) argue that homework clubs improve reading.`, why: `& inside a running sentence. When the names are part of your sentence, join them with "and".` },
+        { t: `Dlamini and Nkosi (2021, p. 44) argue that homework clubs improve reading.`, why: `(2021, p. 44) is APA. NWU Harvard writes year:page with a colon: (2021:44).` },
+        { t: `According to (Dlamini & Nkosi, 2021:44), homework clubs improve reading.`, why: `"According to (...)" is never allowed. Either the names sit in your sentence, or the whole citation goes in a bracket at the end of the claim.` },
+        { t: `Dlamini and Nkosi (2021:44) argue that homework clubs improve reading.`, why: `Names in the sentence, joined with "and", then only (year:page) in the bracket.` }
+      ],
+      key: 3,
+      rule: AND_RULE
+    },
+    {
+      qid: "rcc2", part: PC,
+      stem: `Same source: Dlamini and Nkosi, 2021, page 44. This time the citation goes in a bracket at the end of your sentence.`,
+      q: `Which sentence is correct?`,
+      opts: [
+        { t: `Homework clubs improve reading (Dlamini and Nkosi, 2021:44).`, why: `"and" inside the bracket. Brackets take &.` },
+        { t: `Homework clubs improve reading (Dlamini & Nkosi, 2021:44).`, why: `& inside the bracket, a comma before the year, year:page with a colon, and the full stop AFTER the bracket, because the citation is part of the sentence.` },
+        { t: `Homework clubs improve reading. (Dlamini & Nkosi, 2021:44)`, why: `The full stop comes before the bracket, so the citation hangs outside the sentence. Put the full stop after the closing bracket.` },
+        { t: `Homework clubs improve reading (Dlamini & Nkosi, 2021, p. 44).`, why: `p. 44 is APA. NWU Harvard writes 2021:44.` }
+      ],
+      key: 1,
+      rule: AND_RULE
+    },
+    {
+      qid: "rcc3", part: PC,
+      stem: `You used the chapter "Play-based learning in Grade R" by N. Radebe (2018). It is on pages 60-79 of a book edited by P. Swart and F. Moosa. Your idea comes from page 66.`,
+      q: `Which in-text citation is correct?`,
+      opts: [
+        { t: `(Swart & Moosa, 2018:66)`, why: `Swart and Moosa only edited the book. They did not write the idea you used.` },
+        { t: `(Radebe in Swart & Moosa, 2018:66)`, why: `"In" belongs in the reference-list entry, not in the citation. The citation names only the chapter author.` },
+        { t: `(Radebe, 2018:66)`, why: `Cite the person who wrote the chapter, with the year and the exact page you used. The editors appear only in the reference list, after In:.` },
+        { t: `(Radebe, Swart & Moosa, 2018:66)`, why: `This makes all three look like co-authors of the chapter. Only Radebe wrote it.` }
+      ],
+      key: 2,
+      rule: `Chapter in an edited book: cite the CHAPTER author only, (Surname, year:page). The editors appear only in the reference list, after In:.`
+    },
+    {
+      qid: "rcc4", part: PC,
+      stem: `You read a 2015 book by H. Botha. On page 32, Botha explains an idea that M. Mabaso put forward in 1987. You never read Mabaso's own work.`,
+      q: `How do you cite the idea, and what goes in the reference list?`,
+      opts: [
+        { t: `Text: Mabaso (1987) argues that ... Reference list: Mabaso only.`, why: `You never held Mabaso's work, so you cannot cite it as if you read it, and you cannot list it.` },
+        { t: `Text: Mabaso (cited by Botha, 2015:32) argues that ... Reference list: Mabaso and Botha.`, why: `Right citation, wrong list. Only sources you actually handled get a reference-list entry. You handled Botha.` },
+        { t: `Text: Botha (2015:32) argues that ... Reference list: Botha only.`, why: `The idea is Mabaso's. Leaving the name out hands Botha the credit for someone else's idea.` },
+        { t: `Text: Mabaso (cited by Botha, 2015:32) argues that ... Reference list: Botha only.`, why: `Name the original thinker, then show where you met the idea: (cited by Botha, 2015:32). Only Botha, the book you actually read, goes in the reference list.` }
+      ],
+      key: 3,
+      rule: `Secondary source: Original (cited by Source, year:page). Only the source you actually held goes in the reference list.`
+    },
+    {
+      qid: "rcc5", part: PC,
+      stmts: [
+        `Words copied exactly need quotation marks and a page number.`,
+        `If a web page has no author, the URL goes in the in-text bracket.`,
+        `Several sources for one claim go in one bracket, in alphabetical order, separated by semicolons.`,
+        `In the text, three or more authors are shortened with <em>et al</em>.`
+      ],
+      q: `Which combination of statements is true?`,
+      opts: [
+        { t: `I, II and III`, why: `II is false, so this option dies. A URL never goes in the in-text bracket.` },
+        { t: `I, III and IV`, why: `I, III and IV are true. II is false: a URL never goes in the in-text bracket. With no person as author, use the organisation, for example (NRCT, 2025), or Anon. if there truly is none.` },
+        { t: `II, III and IV`, why: `II is false. This option also leaves out I, which is true.` },
+        { t: `All four: I, II, III and IV`, why: `II is false, so "all four" cannot be right.` }
+      ],
+      key: 1,
+      rule: `Combination questions: judge each statement on its own first, then kill every option that contains a false one.`
+    },
+
+    // ---------- Part D: using sources ----------
+    {
+      qid: "rcd1", part: PD,
+      paras: [
+        { label: "Source: Maseko (2024:15)", t: `Learners in these schools do not fail mathematics because they lack reasoning skills. Most of them reason well in their home language. They fail because the tests are written in English, a language they do not yet read fluently.` },
+        { label: "Student's sentence", t: `According to Maseko (2024:15), weak reasoning is the main reason why learners at these schools fail mathematics.` }
+      ],
+      q: `What is the main problem with the student's sentence?`,
+      opts: [
+        { t: `It says the opposite of what the source says.`, why: `Maseko says learners do NOT fail because of weak reasoning; the problem is the language of the test. The student's sentence claims the reverse, and the citation puts that claim in Maseko's mouth.` },
+        { t: `It copies too many words exactly from the source.`, why: `Only a few words match (learners, fail, mathematics). The wording is the student's own. The problem is what the sentence claims.` },
+        { t: `The page number is missing from the citation.`, why: `The page number is there: Maseko (2024:15).` },
+        { t: `Nothing is wrong. It is a fair paraphrase, and it has a citation.`, why: `A citation does not make a paraphrase fair. A paraphrase must keep the source's meaning, and this one flips it.` }
+      ],
+      key: 0,
+      rule: `The same-direction test: does my sentence claim what the source claims? A paraphrase keeps the meaning, not just the topic.`
+    },
+    {
+      qid: "rcd2", part: PD,
+      stem: `Ndaba (2019:23) and Ferreira (2021:8) both found that small reading groups help weak readers catch up.`,
+      q: `What is the best way to use both sources?`,
+      opts: [
+        { t: `Small reading groups help weak readers catch up (Ndaba, 2019:23). Small reading groups also help weak readers catch up (Ferreira, 2021:8).`, why: `Fact stacking: the same fact twice, in two sentences. Both sources support ONE claim, so they belong in one bracket.` },
+        { t: `Small reading groups help weak readers catch up (Ferreira, 2021:8, Ndaba, 2019:23).`, why: `One bracket, but a comma between the sources blurs where one ends and the next begins. Separate sources with a semicolon.` },
+        { t: `Small reading groups help weak readers catch up (Ferreira, 2021:8; Ndaba, 2019:23).`, why: `One claim, one bracket, sources in alphabetical order (F before N), separated by a semicolon.` },
+        { t: `Small reading groups help weak readers catch up (Ndaba, 2019:23; Ferreira, 2021:8).`, why: `Right punctuation, wrong order. Sources in one bracket go in alphabetical order by author, not in the order of their years.` }
+      ],
+      key: 2,
+      rule: `Several sources for one claim: ONE sentence, ONE bracket, alphabetical by author, semicolons between them.`
+    },
+    {
+      qid: "rcd3", part: PD,
+      stem: `An essay cites Kruger, Lekota and Smit in the text. Its reference list has four entries: Kruger, Lekota, Smit and Zulu. The writer read Zulu's book but never cited it.`,
+      q: `Which statement is true?`,
+      opts: [
+        { t: `It is fine. The extra entry shows the marker how widely the writer read.`, why: `A list of everything you read is a bibliography. Your list is headed Reference list, and every entry in it must be cited in the text.` },
+        { t: `Every entry must be cited in the text. Zulu must be cited where it is used, or removed.`, why: `Citations and entries come in pairs. Every citation needs an entry, and every entry needs a citation. Cite Zulu where it is used, or take the entry out.` },
+        { t: `It is fine, as long as the list is split into books, journals and web pages.`, why: `The reference list is ONE alphabetical list, never grouped by source type. Grouping would not fix the uncited entry either.` },
+        { t: `Uncited sources may stay, as long as they go at the end under the heading "Other sources".`, why: `There is no "Other sources" section. The reference list holds cited sources only, in one alphabetical list.` }
+      ],
+      key: 1,
+      rule: `Reference list = only what you cited, in one alphabetical list. Citations and entries always come in pairs.`
+    },
+
+    // ---------- Part E: cohesion ----------
+    {
+      qid: "rce1", part: PE,
+      paras: [
+        { label: "Paragraph", t: `Many rural schools have no library. Teachers often buy books with their own money. Learners also share one textbook between three. This makes it hard to build a reading culture.` }
+      ],
+      q: `The last sentence starts with a bare "This". Which revision makes the link clearest?`,
+      opts: [
+        { t: `It makes it hard to build a reading culture.`, why: `"It" is just as vague as a bare "This". It could point to any of the three facts.` },
+        { t: `That makes it hard to build a reading culture.`, why: `"That" has the same problem: the reader still has to guess what it points back to.` },
+        { t: `This clearly makes it hard to build a reading culture.`, why: `Adding "clearly" does not say WHAT makes it hard. The reference is still vague.` },
+        { t: `This shortage of books makes it hard to build a reading culture.`, why: `A summary noun ("shortage of books") wraps up all three facts, so the reader knows exactly what "This" points back to.` }
+      ],
+      key: 3,
+      rule: `A bare "This" can point back to several things. Add a summary noun: This shortage, This problem, This change.`
+    },
+    {
+      qid: "rce2", part: PE,
+      paras: [
+        { label: "Paragraph", t: `Many first-year students struggle to manage their time. On the one hand, they have a heavy reading load. On the other hand, they often work part-time jobs in the evenings.` }
+      ],
+      q: `Why is "On the one hand ... On the other hand" a problem here?`,
+      opts: [
+        { t: `These connectors are too informal for academic writing.`, why: `They are standard academic connectors. The problem is what they signal, not their tone.` },
+        { t: `These connectors may only be used in a conclusion.`, why: `There is no such rule. They can appear anywhere a real contrast is needed.` },
+        { t: `They signal a contrast, but the second sentence adds a similar point. It needs Furthermore or In addition.`, why: `"On the one hand / On the other hand" promises two opposite sides. A heavy reading load and evening jobs are two similar pressures, so the second needs an additive connector.` },
+        { t: `Nothing is wrong. The connectors link the two sentences smoothly and show the reader how the paragraph is built.`, why: `The connectors point in the wrong direction: they promise a contrast that never comes.` }
+      ],
+      key: 2,
+      rule: CONNECTOR_RULE
+    },
+    {
+      qid: "rce3", part: PE,
+      paras: [
+        { label: "Paragraph", t: `In 2024, the school started a reading club for Grade 7 learners. Twenty learners joined the club. The school's Grade 7 mathematics results also improved that year. Therefore, reading clubs are the best way to improve mathematics results.` }
+      ],
+      q: `Why is "Therefore" in the last sentence a problem?`,
+      opts: [
+        { t: `It promises a result that the evidence before it does not support.`, why: `"Therefore" says "this follows from what came before". One club of twenty learners and better results in the same year do not show that reading clubs are the BEST way to improve mathematics. The claim does not follow.` },
+        { t: `"Therefore" may never be used at the start of a sentence in academic writing.`, why: `"Therefore" can start a sentence. The problem is the claim it introduces.` },
+        { t: `The writer should have used "However", because the last sentence contrasts with the rest.`, why: `"However" signals contrast, and nothing here is contrasted. The writer wants a result connector; the evidence just cannot carry this result.` },
+        { t: `The sentence after "Therefore" needs a citation, because it states a fact.`, why: `A citation would not repair it. The writer's own evidence does not lead to this conclusion.` }
+      ],
+      key: 0,
+      rule: `"Therefore" promises a result. Before you use it, check that the claim really follows from the evidence before it.`
+    },
+    {
+      qid: "rce4", part: PE,
+      instr: `Read paragraph 1 and the rest of paragraph 2. The first sentence of paragraph 2 is missing.`,
+      paras: [
+        { label: "Paragraph 1", t: `Many South African schools now allow learners to bring smartphones to class. Teachers use the phones for quick quizzes, dictionary searches and research tasks. In this way, the phones can support learning when they are used with a clear purpose.` },
+        { label: "Paragraph 2", t: `[gap] Notifications pull learners' attention away from the lesson every few minutes. Some learners also use their phones to share answers during tests. Teachers then spend valuable time policing devices instead of teaching.` }
+      ],
+      q: `Which sentence is the best opening for paragraph 2?`,
+      opts: [
+        { t: `Smartphones are useful tools in class for quick quizzes, dictionary searches and research tasks.`, why: `It only repeats paragraph 1. It does not prepare the reader for the problems in paragraph 2.` },
+        { t: `Many schools also struggle with poor Wi-Fi and the high cost of mobile data.`, why: `Wi-Fi and data costs are a new, third topic. Paragraph 2 never mentions them.` },
+        { t: `Yet the same phones that support learning can also disrupt it.`, why: `It looks BACK ("the same phones that support learning") and FORWARD ("can also disrupt it"), which is exactly what paragraph 2 goes on to show.` },
+        { t: `Some learners use their phones to share answers during tests.`, why: `This is one detail from paragraph 2, and it repeats a later sentence. It does not link back to paragraph 1.` }
+      ],
+      key: 2,
+      rule: TRANSITION_RULE
+    },
+    {
+      qid: "rce5", part: PE,
+      instr: `Two paragraphs are summarised below.`,
+      paras: [
+        { label: "Paragraph 1 (summary)", t: `Explains why many Grade 1 learners in township schools start school without having been read to at home: parents work long hours, and there are few children's books in their home languages.` },
+        { label: "Paragraph 2 (summary)", t: `Describes how three community libraries started weekend story hours in isiZulu and Sesotho, and what changed for the children who attended.` }
+      ],
+      q: `Which of these sentences works as a transition between the two paragraphs?`,
+      opts: [
+        { t: `One of the libraries runs its story hour in Sesotho on Saturday mornings.`, why: `One small detail from paragraph 2. It does not connect back to paragraph 1.` },
+        { t: `Another concern is that many teacher training colleges offer too few courses on how to teach early reading.`, why: `Teacher training is a new, third topic that neither paragraph discusses.` },
+        { t: `Parents who work long hours often have little time to read to their children.`, why: `This stays on paragraph 1's topic. It does not move the reader towards the libraries.` },
+        { t: `Where homes have few books and little time for reading, community libraries have begun to fill the gap.`, why: `It looks BACK (homes with few books and little time) and FORWARD (community libraries filling the gap), so it bridges the two paragraphs.` }
+      ],
+      key: 3,
+      rule: TRANSITION_RULE
+    },
+    {
+      qid: "rce6", part: PE,
+      stem: `The clinic extended its opening hours. ______, waiting times did not improve.`,
+      q: `Which connector fits the gap?`,
+      opts: [
+        { t: `Therefore`, why: `"Therefore" signals a result. Waiting times that did not improve are the opposite of the expected result.` },
+        { t: `However`, why: `The second sentence goes against what you would expect from the first. That is a contrast, so "However".` },
+        { t: `Furthermore`, why: `"Furthermore" adds a similar point. The second sentence pushes against the first.` },
+        { t: `For example`, why: `"For example" introduces an example of the first idea. Waiting times not improving is not an example of longer opening hours.` }
+      ],
+      key: 1,
+      rule: CONNECTOR_RULE
+    }
+  ];
+
+  // ---------- self-check ----------
+  var TOTAL = QUESTIONS.length; // 1 mark each
+  if (QUESTIONS.length !== 24 || TOTAL !== 24) {
+    document.body.insertAdjacentHTML("afterbegin", "<p style='color:var(--bad);font-weight:700'>Build check failed: " + QUESTIONS.length + " questions, " + TOTAL + " marks.</p>");
+  }
+  window.RCDATA = { QUESTIONS: QUESTIONS, TOTAL: TOTAL };
+
+  // ---------- safe rendering: escape everything, then allow <em> back ----------
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+  function rich(s) { return esc(s).replace(/&lt;(\/?)em&gt;/g, "<$1em>"); }
+  function optBody(t) {
+    if (Array.isArray(t)) return t.map(function (e) { return "<span class='eline'>" + rich(e) + "</span>"; }).join("");
+    return rich(t);
+  }
+  function promptHTML(q) {
+    var h = "";
+    if (q.instr) h += "<p class='instr'>" + rich(q.instr) + "</p>";
+    if (q.details) {
+      h += "<div class='src'><p class='src-h'>Source details</p><dl>" + q.details.map(function (d) {
+        return "<dt>" + esc(d[0]) + "</dt><dd>" + esc(d[1]) + "</dd>";
+      }).join("") + "</dl></div>";
+    }
+    if (q.stem) h += "<div class='stem'>" + rich(q.stem) + "</div>";
+    if (q.paras) {
+      h += q.paras.map(function (p) {
+        return "<div class='para'><p class='para-h'>" + esc(p.label) + "</p><p>" +
+          rich(p.t).replace("[gap]", "<span class='gap'>missing sentence</span>") + "</p></div>";
+      }).join("");
+    }
+    if (q.stmts) {
+      h += "<ol class='stmts'>" + q.stmts.map(function (s, i) {
+        return "<li><span class='rn'>" + ROMAN[i] + ".</span><span>" + rich(s) + "</span></li>";
+      }).join("") + "</ol>";
+    }
+    if (q.entry) h += "<div class='entry'>" + rich(q.entry) + "</div>";
+    h += "<p class='qtext'>" + rich(q.q) + "</p>";
+    return h;
+  }
+
+  // ---------- state ----------
+  var idx = 0;
+  var picks = [];
+  var checked = [];
+  var startedAt = 0;
+
+  var el = function (id) { return document.getElementById(id); };
+
+  function scoreOf(i) { var r = picks[i] === QUESTIONS[i].key; return { got: r ? 1 : 0, right: r }; }
+  function elapsedMin() { return Math.round((Date.now() - startedAt) / 60000); }
+
+  function setBar() {
+    el("barLine").innerHTML = "<span>Drill · " + QUESTIONS.length + " questions · " + TOTAL + " marks</span>";
+  }
+
+  // ---------- rendering ----------
+  function renderMap() {
+    var html = "";
+    QUESTIONS.forEach(function (q, i) {
+      var cls = [];
+      if (checked[i]) cls.push(scoreOf(i).right ? "good" : "bad");
+      if (i === idx) cls.push("cur");
+      html += "<button class='" + cls.join(" ") + "' data-i='" + i + "' aria-label='Question " + (i + 1) + "'>" + (i + 1) + "</button>";
+    });
+    el("map").innerHTML = html;
+    el("map").querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () { go(+b.getAttribute("data-i")); });
+    });
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[idx];
+    el("qPart").textContent = q.part;
+    el("qNo").textContent = "Question " + (idx + 1) + " of " + QUESTIONS.length + " · 1 mark";
+
+    var html = promptHTML(q);
+    html += "<div class='opts' id='opts'>";
+    q.opts.forEach(function (o, i) {
+      html += "<button class='opt' data-i='" + i + "'><span class='letter'>" + LETTERS[i] + "</span><span class='body'>" + optBody(o.t) + "</span></button>";
+    });
+    html += "</div>";
+    el("qBody").innerHTML = html;
+
+    el("opts").querySelectorAll(".opt").forEach(function (b) {
+      b.addEventListener("click", function () { pick(+b.getAttribute("data-i")); });
+    });
+
+    el("feedback").hidden = true;
+    el("feedback").innerHTML = "";
+    if (checked[idx]) showFeedback();
+    syncButtons();
+    renderMap();
+    el("qCard").scrollIntoView({ block: "start" });
+  }
+
+  function pick(i) {
+    if (checked[idx]) return;
+    picks[idx] = i;
+    checked[idx] = true;
+    showFeedback();
+    renderMap();
+    syncButtons();
+  }
+
+  function syncButtons() {
+    el("backBtn").disabled = idx === 0;
+    el("nextBtn").textContent = idx === QUESTIONS.length - 1 ? "Show my marks" : "Next";
+  }
+
+  function showFeedback() {
+    var q = QUESTIONS[idx];
+    var sc = scoreOf(idx);
+    el("opts").querySelectorAll(".opt").forEach(function (b, j) {
+      b.disabled = true;
+      if (j === picks[idx]) b.classList.add(sc.right ? "picked-good" : "picked-bad");
+      if (!sc.right && j === q.key) b.classList.add("reveal");
+    });
+    var html = "<p class='verdict " + (sc.right ? "good" : "bad") + "'>" + (sc.right ? "Correct." : "Not this one. The answer is " + LETTERS[q.key] + ".") + "</p>";
+    html += whyList(q, picks[idx]);
+    html += "<div class='rule'>" + rich(q.rule) + "</div>";
+    el("feedback").innerHTML = html;
+    el("feedback").hidden = false;
+  }
+
+  function whyList(q, mine) {
+    var html = "<ul class='whylist'>";
+    q.opts.forEach(function (o, j) {
+      var cls = [];
+      if (j === q.key) cls.push("key");
+      if (j === mine) cls.push("mine");
+      var tags = "";
+      if (j === q.key) tags += "<span class='tag k'>Key</span>";
+      if (j === mine) tags += "<span class='tag m'" + (j === q.key ? " style='color:var(--good)'" : "") + ">Your pick</span>";
+      html += "<li class='" + cls.join(" ") + "'><b>" + LETTERS[j] + "</b>" + tags + ": " + rich(o.why) + "</li>";
+    });
+    return html + "</ul>";
+  }
+
+  function go(i) {
+    if (i < 0 || i >= QUESTIONS.length) return;
+    idx = i;
+    renderQuestion();
+  }
+
+  function next() {
+    if (idx < QUESTIONS.length - 1) { go(idx + 1); return; }
+    finish();
+  }
+
+  function finish() {
+    var minutes = elapsedMin();
+    var total = 0;
+    var answers = QUESTIONS.map(function (q, i) {
+      var sc = scoreOf(i);
+      total += sc.got;
+      return { qid: q.qid, pick: picks[i] === null ? null : LETTERS[picks[i]], right: sc.right, got: sc.got };
+    });
+    renderResults(total, minutes);
+    saveRun({ at: new Date().toISOString(), mode: "drill", score: total, total: TOTAL, minutes: minutes, answers: answers });
+  }
+
+  function renderResults(total, minutes) {
+    el("qArea").hidden = true;
+    el("startCard").hidden = true;
+
+    // missed rules first (one line per rule, with the questions it came from)
+    var order = [], byRule = {};
+    QUESTIONS.forEach(function (q, i) {
+      if (scoreOf(i).right) return;
+      if (!byRule[q.rule]) { byRule[q.rule] = []; order.push(q.rule); }
+      byRule[q.rule].push(i + 1);
+    });
+    var mr = "<p class='rev-h' style='margin-top:4px'>Rules to look at again</p>";
+    if (order.length) {
+      mr += "<ul class='missrules'>" + order.map(function (r) {
+        return "<li><span class='qn'>Q" + byRule[r].join(", Q") + ":</span> " + rich(r) + "</li>";
+      }).join("") + "</ul>";
+    } else {
+      mr += "<p class='missrules-none'>None missed this run. The habit that carries the test: find the fingerprint first.</p>";
+    }
+    el("missRules").innerHTML = mr;
+
+    el("scoreBig").textContent = total + " / " + TOTAL;
+    el("scoreLine").textContent = Math.round(total / TOTAL * 100) + "% · " + minutes + " min";
+    var missHtml = "", hitHtml = "";
+    QUESTIONS.forEach(function (q, i) {
+      var sc = scoreOf(i);
+      if (sc.right) hitHtml += reviewCard(q, i, sc); else missHtml += reviewCard(q, i, sc);
+    });
+    el("missList").innerHTML = missHtml;
+    el("hitList").innerHTML = hitHtml;
+    el("missH").hidden = missHtml === "";
+    el("hitH").hidden = hitHtml === "";
+    el("resArea").hidden = false;
+    el("resArea").scrollIntoView({ block: "start" });
+  }
+
+  function reviewCard(q, i, sc) {
+    var html = "<div class='card rcard" + (sc.right ? "" : " miss") + "'>";
+    html += "<span class='got'>" + sc.got + " / 1</span>";
+    html += "<p class='part'>" + q.part + "</p><p class='qno'>Question " + (i + 1) + "</p>";
+    html += promptHTML(q);
+    if (picks[i] === null) html += "<p class='why unans'>Not answered.</p>";
+    html += "<div class='opts'>";
+    q.opts.forEach(function (o, j) {
+      var cls = "opt";
+      if (j === picks[i]) cls += j === q.key ? " picked-good" : " picked-bad";
+      else if (j === q.key) cls += " reveal";
+      html += "<button class='" + cls + "' disabled><span class='letter'>" + LETTERS[j] + "</span><span class='body'>" + optBody(o.t) + "</span></button>";
+    });
+    html += "</div><div class='feedback'>" + whyList(q, picks[i]);
+    html += "<div class='rule'>" + rich(q.rule) + "</div>";
+    html += "</div></div>";
+    return html;
+  }
+
+  function saveRun(record) {
+    var status = el("saveStatus");
+    if (!(window.claude && window.claude.use)) {
+      status.textContent = "Your score is not saved here, so note it down.";
+      return;
+    }
+    status.textContent = "Saving your run...";
+    window.claude.use("db").then(function (db) {
+      if (!db) {
+        status.textContent = "Your score is not saved here, so note it down.";
+        return;
+      }
+      return db.collection("runs").add(record).then(function () {
+        status.textContent = "Run saved. Your tutor can read it.";
+      });
+    }).catch(function () {
+      status.textContent = "Run not saved (connection hiccup). Your marks above still stand.";
+    });
+  }
+
+  function begin() {
+    picks = QUESTIONS.map(function () { return null; });
+    checked = QUESTIONS.map(function () { return false; });
+    idx = 0;
+    startedAt = Date.now();
+    setBar();
+    el("startCard").hidden = true;
+    el("resArea").hidden = true;
+    el("qArea").hidden = false;
+    renderQuestion();
+  }
+
+  // ---------- wiring ----------
+  el("startBtn").addEventListener("click", begin);
+  el("drillBtn").addEventListener("click", begin);
+  el("backBtn").addEventListener("click", function () { go(idx - 1); });
+  el("nextBtn").addEventListener("click", next);
+
+  document.addEventListener("keydown", function (e) {
+    if (el("qArea").hidden) return;
+    var t = e.target && e.target.tagName;
+    if (t === "INPUT" || t === "TEXTAREA") return;
+    var pos = ["a", "b", "c", "d"].indexOf((e.key || "").toLowerCase());
+    if (pos > -1 && !e.ctrlKey && !e.metaKey && !e.altKey) pick(pos);
+  });
+})();
+</script>

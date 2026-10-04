@@ -1,0 +1,1163 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 9 Charts Drill</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F8;
+    --card: #FFFFFF;
+    --ink: #22303C;
+    --muted: #5B6B78;
+    --line: #D8DFE5;
+    --accent: #0E7C7B;
+    --accent-soft: #E1F0EF;
+    --good: #2F7D4C;
+    --good-bg: #E4F3E9;
+    --bad: #C2453F;
+    --bad-bg: #FAE8E6;
+    --rule-bg: #FBF3DC;
+    --rule-ink: #7A5A12;
+    --quote-bg: #F0F3F5;
+    /* chart tokens */
+    --grid: #C3CDD6;
+    --bar1: #0B5F5E;
+    --bar2: #8CCBC7;
+    --bar2-edge: #3E8E8A;
+    --on1: var(--card);
+    --on2: var(--ink);
+    --pie1: #0E7C7B;
+    --pie2: #9A5B13;
+    --pie3: #3F51A3;
+    --pie4: #8A3F82;
+    --on-pie: var(--card);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141A20;
+      --card: #1D2530;
+      --ink: #E7ECF1;
+      --muted: #9AA8B4;
+      --line: #32404D;
+      --accent: #5BC6C2;
+      --accent-soft: #1E3434;
+      --good: #6CC58D;
+      --good-bg: #1E3327;
+      --bad: #E08078;
+      --bad-bg: #3A2320;
+      --rule-bg: #332B14;
+      --rule-ink: #E3C77E;
+      --quote-bg: #171E26;
+      --grid: #3F4E5C;
+      --bar1: #2C9A95;
+      --bar2: #C4E8E5;
+      --bar2-edge: #C4E8E5;
+      --on1: var(--card);
+      --on2: var(--card);
+      --pie1: #7FD3CF;
+      --pie2: #EDC27A;
+      --pie3: #AEB9F2;
+      --pie4: #E2A9DA;
+      --on-pie: var(--card);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141A20;
+    --card: #1D2530;
+    --ink: #E7ECF1;
+    --muted: #9AA8B4;
+    --line: #32404D;
+    --accent: #5BC6C2;
+    --accent-soft: #1E3434;
+    --good: #6CC58D;
+    --good-bg: #1E3327;
+    --bad: #E08078;
+    --bad-bg: #3A2320;
+    --rule-bg: #332B14;
+    --rule-ink: #E3C77E;
+    --quote-bg: #171E26;
+    --grid: #3F4E5C;
+    --bar1: #2C9A95;
+    --bar2: #C4E8E5;
+    --bar2-edge: #C4E8E5;
+    --on1: var(--card);
+    --on2: var(--card);
+    --pie1: #7FD3CF;
+    --pie2: #EDC27A;
+    --pie3: #AEB9F2;
+    --pie4: #E2A9DA;
+    --on-pie: var(--card);
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Public Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 16px 16px 40px;
+    overflow-wrap: break-word;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; }
+  header { margin: 8px 0 12px; }
+  h1 {
+    font-family: "Zilla Slab", Georgia, serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0 0 2px;
+    text-wrap: balance;
+  }
+  .bar-line { color: var(--muted); font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; }
+  .map { display: flex; flex-wrap: wrap; gap: 5px; margin: 12px 0 14px; }
+  .map button {
+    width: 34px; height: 30px;
+    border-radius: 7px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    font: inherit; font-size: 0.8rem; font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+  }
+  .map button.cur { border-color: var(--accent); color: var(--ink); }
+  .map button.good { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+  .map button.bad { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 18px 20px;
+    margin-bottom: 14px;
+  }
+  .part {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 2px;
+  }
+  .qno {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 8px;
+  }
+  .instr { margin: 0 0 10px; font-size: 0.95rem; }
+  .stem {
+    background: var(--quote-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 12px;
+    margin: 0 0 4px;
+    font-family: "Zilla Slab", Georgia, serif;
+    font-weight: 600; font-size: 1.05rem; line-height: 1.4;
+  }
+  .qtext {
+    font-family: "Zilla Slab", Georgia, serif;
+    font-weight: 600; font-size: 1.08rem; line-height: 1.4;
+    margin: 12px 0 8px;
+  }
+  details.text {
+    background: var(--quote-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 8px 12px;
+    margin: 0 0 12px;
+    font-size: 0.93rem;
+  }
+  details.text summary {
+    cursor: pointer; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  details.text figure.chart { margin-top: 8px; }
+  .opts { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    width: 100%; text-align: left;
+    background: var(--card); color: var(--ink);
+    border: 1.5px solid var(--line); border-radius: 10px;
+    padding: 10px 12px;
+    font: inherit; font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt .letter {
+    flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1.5px solid var(--line); font-weight: 700; font-size: 0.85rem; margin-top: 1px;
+  }
+  .opt .body { min-width: 0; padding-top: 2px; }
+  .opt.picked-good { border-color: var(--good); background: var(--good-bg); }
+  .opt.picked-good .letter { border-color: var(--good); color: var(--good); }
+  .opt.picked-bad { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.picked-bad .letter { border-color: var(--bad); color: var(--bad); }
+  .opt.reveal { border-color: var(--good); border-style: dashed; }
+  .opt.reveal .letter { border-color: var(--good); color: var(--good); }
+  .feedback { margin-top: 14px; }
+  .verdict { font-family: "Zilla Slab", Georgia, serif; font-weight: 700; font-size: 1.05rem; margin: 0 0 8px; }
+  .verdict.good { color: var(--good); }
+  .verdict.bad { color: var(--bad); }
+  .why { font-size: 0.92rem; margin: 0 0 8px; }
+  .whylist { margin: 0 0 10px; padding: 0; list-style: none; font-size: 0.9rem; }
+  .whylist li { padding: 6px 8px; border-radius: 8px; margin-bottom: 4px; }
+  .whylist li.key { background: var(--good-bg); }
+  .whylist li.mine { outline: 1.5px solid var(--bad); }
+  .whylist li.mine.key { outline-color: var(--good); }
+  .whylist .tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-left: 6px; }
+  .whylist .tag.k { color: var(--good); }
+  .whylist .tag.m { color: var(--bad); }
+  .rule {
+    background: var(--rule-bg); color: var(--rule-ink);
+    border-radius: 8px; padding: 9px 12px;
+    font-size: 0.9rem; font-weight: 600;
+  }
+  .rule::before { content: "Rule: "; font-weight: 700; }
+  .nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .nav .spacer { flex: 1; }
+  .btn {
+    background: var(--accent); color: var(--card);
+    border: none; border-radius: 10px;
+    padding: 10px 20px;
+    font: inherit; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+  .btn:disabled { opacity: 0.45; cursor: default; }
+  .score {
+    font-family: "Zilla Slab", Georgia, serif; font-weight: 700;
+    font-size: 2.4rem; margin: 6px 0 0; font-variant-numeric: tabular-nums;
+  }
+  .scoreline { color: var(--muted); margin: 2px 0 12px; }
+  .rev-h {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 18px 0 8px;
+  }
+  .missrules { margin: 0 0 6px; padding: 0; list-style: none; }
+  .missrules li {
+    background: var(--rule-bg); color: var(--rule-ink);
+    border-radius: 8px; padding: 8px 12px; margin-bottom: 6px;
+    font-size: 0.9rem; font-weight: 600;
+  }
+  .missrules .qn { font-weight: 700; margin-right: 4px; }
+  .missrules-none { margin: 0 0 6px; font-size: 0.95rem; }
+  .rcard { border-left: 4px solid var(--good); }
+  .rcard.miss { border-left-color: var(--bad); }
+  .rcard .got { float: right; font-weight: 700; font-size: 0.85rem; font-variant-numeric: tabular-nums; color: var(--good); }
+  .rcard.miss .got { color: var(--bad); }
+  .save-status { color: var(--muted); font-size: 0.8rem; margin: 10px 0 0; }
+  .start p { margin: 0 0 10px; }
+  .lect { font-size: 0.95rem; background: var(--quote-bg); border-radius: 8px; padding: 10px 12px; }
+  .lect p:last-child { margin-bottom: 0; }
+  .habit {
+    margin: 12px 0; background: var(--rule-bg); color: var(--rule-ink);
+    border-radius: 8px; padding: 10px 12px; font-size: 0.95rem;
+  }
+  .unans { color: var(--bad); font-weight: 700; }
+  [hidden] { display: none !important; }
+
+  /* ---------- charts ---------- */
+  .figcol { margin: 0 0 4px; }
+  figure.chart {
+    margin: 0;
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 8px 8px;
+    background: var(--card);
+  }
+  .figtitle {
+    font-family: "Zilla Slab", Georgia, serif; font-weight: 700;
+    font-size: 0.98rem; line-height: 1.3; margin: 0 4px 6px;
+  }
+  .figsrc { color: var(--muted); font-size: 0.75rem; margin: 6px 4px 0; }
+  .chart-box { width: 100%; }
+  .chart-svg {
+    display: block; max-width: 100%; height: auto;
+    color: var(--ink);
+    font-family: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  }
+  .chart-svg text { fill: currentColor; font-size: 12.5px; }
+  .chart-svg .cat { paint-order: stroke; stroke: var(--card); stroke-width: 3px; stroke-linejoin: round; }
+  .chart-svg .tick { font-size: 12px; font-variant-numeric: tabular-nums; }
+  .chart-svg .axl { fill: var(--muted); font-size: 12px; font-weight: 600; }
+  .chart-svg .lg { font-size: 12.5px; }
+  .chart-svg .gl { stroke: var(--grid); stroke-width: 1; }
+  .chart-svg .ax { stroke: var(--muted); stroke-width: 1.3; }
+  .chart-svg .b1 { fill: var(--bar1); }
+  .chart-svg .b2 { fill: var(--bar2); stroke: var(--bar2-edge); stroke-width: 1; }
+  .chart-svg .pie { stroke: var(--card); stroke-width: 2; }
+  .chart-svg .p1 { fill: var(--pie1); }
+  .chart-svg .p2 { fill: var(--pie2); }
+  .chart-svg .p3 { fill: var(--pie3); }
+  .chart-svg .p4 { fill: var(--pie4); }
+  .chart-svg .pl { fill: var(--on-pie); font-size: 14px; font-weight: 700; }
+  .chart-svg .s1 { fill: var(--on1); font-size: 13px; font-weight: 700; }
+  .chart-svg .s2 { fill: var(--on2); font-size: 13px; font-weight: 700; }
+
+  @media (min-width: 900px) {
+    .wrap { max-width: 1180px; }
+    .card.narrow, #startCard, #confirmCard, #resArea .card { max-width: 760px; }
+    .qgrid.has-fig {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: 26px;
+      align-items: start;
+    }
+    .qgrid.has-fig .figcol { position: sticky; top: 12px; margin: 0; }
+    .qgrid.has-fig .qtext { margin-top: 0; }
+    figure.chart { padding: 10px 12px 8px; }
+  }
+</style>
+
+<div class="wrap" id="wrapEl">
+  <header>
+    <h1>Lesson 9: Reading Charts</h1>
+    <div class="bar-line" id="barLine">
+      <span>ALDE122 semester test prep · 24 questions · 24 marks</span>
+    </div>
+  </header>
+
+  <!-- START -->
+  <div class="card start" id="startCard">
+    <p class="qno">Before you start</p>
+    <div class="lect">
+      <p>This drill walks through Lesson 9 in five small steps: the parts of a chart, what the lecturer's questions are really asking, reading one clustered bar chart, three chart traps, and writing about a chart.</p>
+      <p><b>24 questions, 1 mark each, about 25 minutes.</b> It starts easy and builds.</p>
+    </div>
+    <div class="habit">The most useful habit: <b>Find the CAPITAL word first. It is the instruction.</b></div>
+    <p>Tap an answer and the explanation appears straight away. No timer. On a laptop the chart sits on the left and the question on the right.</p>
+    <div class="nav">
+      <span class="spacer"></span>
+      <button class="btn" id="startBtn">Start the drill</button>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="qArea" hidden>
+    <div class="map" id="map"></div>
+    <div class="card" id="qCard">
+      <p class="part" id="qPart"></p>
+      <p class="qno" id="qNo"></p>
+      <div class="qgrid" id="qGrid">
+        <div class="figcol" id="figCol" hidden></div>
+        <div class="qcol">
+          <div id="qBody"></div>
+          <div class="feedback" id="feedback" hidden></div>
+          <div class="nav">
+            <button class="btn ghost" id="backBtn">Back</button>
+            <span class="spacer"></span>
+            <button class="btn" id="nextBtn">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resArea" hidden>
+    <div class="card">
+      <p class="qno" id="resMode">Drill marks</p>
+      <div id="missRules"></div>
+      <p class="score" id="scoreBig"></p>
+      <p class="scoreline" id="scoreLine"></p>
+      <p class="save-status" id="saveStatus"></p>
+      <div class="nav">
+        <span class="spacer"></span>
+        <button class="btn ghost" id="drillBtn">Run the drill again</button>
+      </div>
+    </div>
+    <p class="rev-h" id="missH">Missed first</p>
+    <div id="missList"></div>
+    <p class="rev-h" id="hitH">Right</p>
+    <div id="hitList"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var LETTERS = ["A", "B", "C", "D"];
+
+  // ---------- chart data (the ONLY source for the charts and for the check script) ----------
+  var FIGS = {
+    fig1: {
+      type: "hbar",
+      title: "Figure 1: Jobs in high-street businesses least at risk from online shopping, 2004 and 2024",
+      series: ["2004", "2024"],
+      axisLabel: "Thousand persons employed",
+      max: 300, step: 50,
+      rows: [
+        ["Fast-food outlets", 215, 290],
+        ["Hair salons", 90, 252],
+        ["Hardware stores", 150, 198],
+        ["Pharmacies", 80, 128],
+        ["Bakeries", 60, 84],
+        ["Butcheries", 45, 54],
+        ["Car washes", 25, 40],
+        ["Internet cafés", 40, 22],
+        ["Video rental shops", 14, 5]
+      ]
+    },
+    fig2: {
+      type: "cols",
+      title: "Figure 2: Visitors to two town libraries, March 2025",
+      axisLabel: "Number of visitors",
+      min: 20000, max: 20600, step: 100,
+      cols: [["Northside", 20100], ["Riverside", 20500]]
+    },
+    fig3: {
+      type: "pie",
+      title: "Figure 3: How first-year students travel to campus (percentage of students)",
+      slices: [["Walk", 35], ["Taxi", 30], ["Car", 20], ["Bus", null]]
+    },
+    fig4: {
+      type: "stack100",
+      title: "Figure 4: Library loans by format, 2014 and 2024 (percentage of all loans)",
+      axisLabel: "Percentage of all loans",
+      parts: ["Printed books", "E-books"],
+      cols: [["2014", 80, 20], ["2024", 60, 40]]
+    }
+  };
+
+  var PA = "Part A · Chart basics";
+  var PB = "Part B · What is she asking?";
+  var PC = "Part C · Reading Figure 1";
+  var PD = "Part D · Three chart traps";
+  var PE = "Part E · Writing about a chart";
+
+  var DECODE_INSTR = `This is a question in the lecturer's style. You cannot answer it (there is no chart). Decide what it asks you to DO.`;
+  var DECODE_Q = `What is this question asking you to do?`;
+
+  var OP_SUB = `Subtract the two years for each one, then compare the raw numbers.`;
+  var OP_PCT = `Work out change ÷ starting value for each one, then compare.`;
+  var OP_ADD = `Add the two bars named, then find the bar that matches the total.`;
+  var OP_CAT = `Build the category first (add its members), then apply the axis unit.`;
+  var OP_GROW = `Find the bar that grew the most between the two years.`;
+  var OP_BIG = `Find the one with the longest bars in both years.`;
+
+  var RELIABLE_RULE = `Vague value words ("most reliable", "most successful") point at the standout feature of the chart. For this setter, that is the biggest growth.`;
+
+  var QUESTIONS = [
+    // ---------- Part A: chart basics ----------
+    {
+      qid: "l9a1", part: PA,
+      q: `A clustered bar chart has a dark bar and a light bar for each business. Which part of the chart tells you what the dark and light bars stand for?`,
+      opts: [
+        { t: `The title above the chart`, why: `The title tells you what the whole chart is about. It does not match colours to meanings.` },
+        { t: `The legend (key)`, why: `The legend is the small box that explains what each colour or pattern stands for. Here it would show which colour is which year.` },
+        { t: `The label on the x axis`, why: `The axis label tells you what the scale measures and its unit (for example, thousands of people). It does not explain the colours.` },
+        { t: `The gridlines behind the bars`, why: `Gridlines help you read values off the axis. They say nothing about what the colours mean.` }
+      ],
+      key: 1,
+      rule: `Colours you cannot explain? Check the legend (key). Title = the topic. Axis label = what the scale measures, and its unit. Gridlines = help to read values.`
+    },
+    {
+      qid: "l9a2", part: PA,
+      q: `You want to show how ONE variable changed over ten years, for example the number of learners at a school each year from 2015 to 2024. Which chart type suits this best?`,
+      opts: [
+        { t: `Pie chart`, why: `A pie shows the parts of ONE whole at one moment. It has no time line, so it cannot show change over ten years.` },
+        { t: `100% stacked column chart`, why: `Every column in this chart reaches 100%, because it shows how a whole splits into parts. With one variable there are no parts to split, and the actual number each year is hidden.` },
+        { t: `Donut chart`, why: `A donut is a pie with a hole. Like a pie, it shows parts of a whole, not change over time. The workbook also warns that donuts can be hard to read.` },
+        { t: `Line chart`, why: `A line chart joins the values year by year, so rises and falls over time are easy to see. It is the usual choice for one variable over time.` }
+      ],
+      key: 3,
+      rule: `Change over time = line chart (a column chart also works). Parts of a whole = pie or donut. Comparing categories = bar chart.`
+    },
+    {
+      qid: "l9a3", part: PA,
+      q: `The first of the six questions for any chart is "What is the chart about?" Where do you look first to answer it?`,
+      opts: [
+        { t: `The title`, why: `The title names the topic, and often the time period and what was measured. It is your first piece of evidence.` },
+        { t: `The legend`, why: `The legend explains colours or patterns. It tells you what the parts are, not what the chart is about.` },
+        { t: `The tallest bar`, why: `The tallest bar is one detail inside the chart. You cannot know what it means until you know the topic.` },
+        { t: `The source line under the chart`, why: `A source line says where the data came from. Useful later, but it does not tell you the topic.` }
+      ],
+      key: 0,
+      rule: `Question 1 of the six: what is the chart about? Read the TITLE first, every time, before you look at a single bar.`
+    },
+    {
+      qid: "l9a4", part: PA,
+      q: `A chart shows a trend rising sharply. Where do you find the CAUSE of that trend?`,
+      opts: [
+        { t: `In the legend`, why: `The legend only explains colours or patterns. It never gives reasons.` },
+        { t: `In the steepest part of the line, where the trend changes fastest`, why: `A steep line shows HOW FAST something changed. It still does not say why.` },
+        { t: `Nowhere in the chart. You reason towards a possible cause and label it as speculation.`, why: `A chart shows what happened, not why. The workbook's model answer labels its causes every time: "although this is just speculation".` },
+        { t: `In the title`, why: `The title names the topic and what was measured. It describes, it does not explain.` }
+      ],
+      key: 2,
+      rule: `Question 6 of the six: what causes the trend? The cause is never in the chart. Reason towards a possible cause and label it as speculation.`
+    },
+
+    // ---------- Part B: decode the stem ----------
+    {
+      qid: "l9b1", part: PB,
+      instr: DECODE_INSTR,
+      stem: `Which shop LOST the most customers?`,
+      q: DECODE_Q,
+      opts: [
+        { t: OP_PCT, why: `There is no word PERCENTAGE in the stem. Without it, this setter wants the count, not the share.` },
+        { t: OP_SUB, why: `LOST and no PERCENTAGE = the count. Subtract the two years for each shop and pick the biggest drop in raw numbers.` },
+        { t: OP_GROW, why: `LOST points the other way. You want the biggest drop, not the biggest rise.` },
+        { t: OP_CAT, why: `There is no group name in capitals (like FOOD or WATER SPORTS), so there is no category to build.` }
+      ],
+      key: 1,
+      rule: `Find the CAPITAL word first. LOST or GREW without the word PERCENTAGE = compare raw numbers (the count).`
+    },
+    {
+      qid: "l9b2", part: PB,
+      instr: DECODE_INSTR,
+      stem: `Which sport grew by about the same PERCENTAGE as netball?`,
+      q: DECODE_Q,
+      opts: [
+        { t: OP_SUB, why: `Raw gaps that look the same are NOT the same percentage. The word PERCENTAGE changes the job.` },
+        { t: OP_ADD, why: `Nothing in the stem says PLUS. No bars need to be added.` },
+        { t: OP_PCT, why: `PERCENTAGE in capitals = divide. Work out change ÷ starting value for netball, then for each other sport, and find the closest match.` },
+        { t: OP_GROW, why: `It does not ask which sport grew the most. It asks which one matches netball's percentage.` }
+      ],
+      key: 2,
+      rule: `PERCENTAGE in capitals = change ÷ starting value, for EACH option. A small bar with a small gap can still have a big percentage.`
+    },
+    {
+      qid: "l9b3", part: PB,
+      instr: DECODE_INSTR,
+      stem: `Soccer PLUS chess in 2010 equals which sport in 2020?`,
+      q: DECODE_Q,
+      opts: [
+        { t: OP_ADD, why: `PLUS = add. Add the soccer and chess bars for 2010, then look along the 2020 bars for the one with that value.` },
+        { t: OP_CAT, why: `There is no category to build here. The stem names the two bars for you.` },
+        { t: OP_SUB, why: `PLUS asks you to add, not to find a difference between years.` },
+        { t: OP_PCT, why: `No PERCENTAGE in the stem. It wants a sum of two values.` }
+      ],
+      key: 0,
+      rule: `PLUS = a hidden sum. Add the two bars named, in the year named, then find the matching bar in the other year.`
+    },
+    {
+      qid: "l9b4", part: PB,
+      instr: DECODE_INSTR,
+      stem: `How many learners took part in WATER SPORTS in 2020?`,
+      q: DECODE_Q,
+      opts: [
+        { t: OP_GROW, why: `Nothing here asks about growth. The stem wants one total in one year.` },
+        { t: OP_PCT, why: `No PERCENTAGE in the stem. "How many" asks for a count.` },
+        { t: OP_ADD, why: `Close, because you do add. But there is no second bar to match. You add up the members and give the total.` },
+        { t: OP_CAT, why: `WATER SPORTS is not one bar. It is a group: swimming, water polo, canoeing and so on. Add its members for the year named, then apply the axis unit (if the axis says thousands, your total is in thousands).` }
+      ],
+      key: 3,
+      rule: `A group name in CAPITALS (WATER SPORTS, PUBLIC TRANSPORT, FOOD) = build the category from its members first. Then apply the unit on the axis label.`
+    },
+    {
+      qid: "l9b5", part: PB,
+      instr: DECODE_INSTR,
+      stem: `Which sport has been the most reliable since 2010?`,
+      q: DECODE_Q,
+      opts: [
+        { t: OP_PCT, why: `No PERCENTAGE in the stem, so this setter is not asking you to divide.` },
+        { t: OP_GROW, why: `For this lecturer, vague value words like "most reliable" or "most successful" point at the standout feature of the chart: the biggest growth.` },
+        { t: OP_BIG, why: `In real life this is a reasonable reading: a sport that is big every year does sound reliable. But this setter means growth.` },
+        { t: OP_ADD, why: `Nothing in the stem says PLUS.` }
+      ],
+      key: 1,
+      rule: RELIABLE_RULE
+    },
+
+    // ---------- Part C: Figure 1 ----------
+    {
+      qid: "l9c1", part: PC, fig: "fig1",
+      q: `About how many people worked in pharmacies in 2024?`,
+      opts: [
+        { t: `About 80 000`, why: `That is the DARK bar, 2004. Check the legend: the question asks about 2024.` },
+        { t: `About 128`, why: `Right reading, missing unit. The axis label says thousand persons employed, so 128 on the axis means 128 000 people.` },
+        { t: `About 128 000`, why: `Find Pharmacies, then the LIGHT bar (2024, see the legend). It ends just past halfway between 100 and 150: about 128. The axis counts thousands, so 128 × 1 000 = 128 000 people.` },
+        { t: `About 200 000`, why: `That is the 2024 bar one row up: Hardware stores, about 198. Trace across from the right label.` }
+      ],
+      key: 2,
+      rule: `Three checks for any reading: the right ROW (category), the right BAR (the legend gives the year), the right UNIT (the axis label).`
+    },
+    {
+      qid: "l9c2", part: PC, fig: "fig1",
+      q: `Which business LOST the most jobs between 2004 and 2024?`,
+      opts: [
+        { t: `Internet cafés`, why: `From 40 thousand in 2004 to 22 thousand in 2024: 40 − 22 = 18 thousand jobs lost. That is the biggest drop in raw numbers.` },
+        { t: `Video rental shops`, why: `14 − 5 = 9 thousand lost. That is the bigger SHARE (about 64%), but there is no PERCENTAGE in the stem, so she wants the count. 18 thousand beats 9 thousand.` },
+        { t: `Butcheries`, why: `From 45 to 54 thousand: they gained 9 thousand jobs. The smallest rise is still a rise, not a loss.` },
+        { t: `Car washes`, why: `Short bars, but the light 2024 bar (40) is longer than the dark 2004 bar (25). Car washes gained jobs.` }
+      ],
+      key: 0,
+      rule: `LOST with no PERCENTAGE = the biggest drop in raw numbers (the count), not the biggest share.`
+    },
+    {
+      qid: "l9c3", part: PC, fig: "fig1",
+      q: `Which business GREW the most between 2004 and 2024?`,
+      opts: [
+        { t: `Fast-food outlets`, why: `The longest bars, but length is not growth. 290 − 215 = 75 thousand: less than half the hair-salon rise.` },
+        { t: `Hardware stores`, why: `From 150 to 198: 48 thousand more. A solid rise, but far below 162 thousand.` },
+        { t: `Pharmacies`, why: `From 80 to 128: 48 thousand more, the same as hardware stores. Still far below 162 thousand.` },
+        { t: `Hair salons`, why: `From 90 to 252 thousand: 252 − 90 = 162 thousand more jobs. No other business comes close.` }
+      ],
+      key: 3,
+      rule: `GREW = the biggest GAP between the two bars, not the longest bar. Compare the change, not the size.`
+    },
+    {
+      qid: "l9c4", part: PC, fig: "fig1",
+      q: `By about what PERCENTAGE did jobs in hair salons increase from 2004 to 2024?`,
+      opts: [
+        { t: `About 50%`, why: `Far too small. 50% of 90 is only 45 thousand, but the rise was 162 thousand.` },
+        { t: `About 100%`, why: `100% would mean the jobs doubled, to about 180 thousand. They reached 252 thousand: more than double.` },
+        { t: `About 200%`, why: `Change ÷ starting value: 162 ÷ 90 = 1.8, so about 180%. Her options are rough, and 180% is nearest to 200%.` },
+        { t: `About 300%`, why: `A 300% increase would mean four times as many: 90 × 4 = 360 thousand. The 2024 bar stops at about 252.` }
+      ],
+      key: 2,
+      rule: `Percentage increase = change ÷ starting value × 100. Her options are rough: work it out, then pick the NEAREST.`
+    },
+    {
+      qid: "l9c5", part: PC, fig: "fig1",
+      q: `Which business increased by about the same PERCENTAGE as Pharmacies?`,
+      opts: [
+        { t: `Hardware stores`, why: `The same raw gap as pharmacies (198 − 150 = 48), but 48 ÷ 150 = 0.32: only 32%. Equal gaps are not equal percentages.` },
+        { t: `Car washes`, why: `Pharmacies: 128 − 80 = 48, and 48 ÷ 80 = 0.6, so 60%. Car washes: 40 − 25 = 15, and 15 ÷ 25 = 0.6, so 60% too. Small bars, same percentage.` },
+        { t: `Bakeries`, why: `84 − 60 = 24, and 24 ÷ 60 = 0.4: 40%. Car washes match pharmacies far better.` },
+        { t: `Fast-food outlets`, why: `290 − 215 = 75, and 75 ÷ 215 is about 0.35: about 35%. Long bars, smaller percentage.` }
+      ],
+      key: 1,
+      rule: `PERCENTAGE = change ÷ starting value, worked out for EACH option. The same gap on a bigger starting bar is a smaller percentage.`
+    },
+    {
+      qid: "l9c6", part: PC, fig: "fig1",
+      q: `Internet cafés PLUS Video rental shops in 2004 equals which business in 2024?`,
+      opts: [
+        { t: `Car washes`, why: `Car washes reached 40 thousand in 2024, short of 54. (If you added the 2024 bars instead, 22 + 5 = 27, you were in the wrong year.)` },
+        { t: `Bakeries`, why: `Bakeries reached 84 thousand in 2024: 30 thousand too many.` },
+        { t: `Pharmacies`, why: `128 thousand in 2024: more than double the sum.` },
+        { t: `Butcheries`, why: `The 2004 (dark) bars: Internet cafés 40 + Video rental shops 14 = 54 thousand. Now search the 2024 (light) bars: Butcheries reached 54 thousand.` }
+      ],
+      key: 3,
+      rule: `PLUS = add the two bars named, in the year named. Then search the OTHER year's bars for the total.`
+    },
+    {
+      qid: "l9c7", part: PC, fig: "fig1",
+      q: `How many people worked in FOOD businesses (fast-food outlets, bakeries and butcheries) in 2024?`,
+      opts: [
+        { t: `About 430 000`, why: `Build the category first: 290 + 84 + 54 = 428 thousand in 2024. The axis counts thousands, so about 430 000 people.` },
+        { t: `About 430`, why: `Right sum, missing unit. The axis counts thousands of people.` },
+        { t: `About 320 000`, why: `That is the 2004 total (215 + 60 + 45 = 320). The question asks about 2024.` },
+        { t: `About 290 000`, why: `That is fast-food outlets alone. FOOD is a category: add all three members.` }
+      ],
+      key: 0,
+      rule: `A CAPITAL group name = build the category from its members, in the right year, then apply the axis unit.`
+    },
+    {
+      qid: "l9c8", part: PC, fig: "fig1",
+      q: `Which business has been the most reliable since 2004?`,
+      opts: [
+        { t: `Fast-food outlets`, why: `The largest in both years, so it sounds reliable, and in real life that is a fair reading. But this setter keys "most reliable" to the biggest growth, and fast-food outlets grew by only 75 thousand.` },
+        { t: `Pharmacies`, why: `A healthy rise (80 to 128, +60%), but hair salons stand out far more.` },
+        { t: `Hair salons`, why: `"Most reliable" is a vague value word. For this setter it points at the standout feature: the biggest growth. Hair salons grew the most (90 to 252 thousand, about +180%).` },
+        { t: `Hardware stores`, why: `Big and steady (150 to 198), but not the standout feature of the chart.` }
+      ],
+      key: 2,
+      rule: RELIABLE_RULE
+    },
+    {
+      qid: "l9c9", part: PC, fig: "fig1",
+      q: `What is the most important reason for the DECREASE in the last two businesses?`,
+      opts: [
+        { t: `Online shopping took their customers away.`, why: `The TITLE rules this out: these are the businesses LEAST at risk from online shopping. Read the title before you guess a cause.` },
+        { t: `Smartphones, home internet and streaming replaced what they sold.`, why: `Both businesses sold something people now have at home: internet access (internet cafés) and films (video rental shops). This cause fits both, and it does not contradict the title.` },
+        { t: `High-street rents rose so sharply that small businesses could no longer afford them.`, why: `Nothing in the chart is about rent, and rising rents would hit every business. Most of the others grew.` },
+        { t: `Fewer young people lived in towns by 2024.`, why: `Nothing in the chart supports this, and it would not explain why only these two fell while the rest grew.` }
+      ],
+      key: 1,
+      rule: `The title is evidence. Read it before you guess a cause. Then pick the cause that fits BOTH businesses and does not contradict the chart.`
+    },
+
+    // ---------- Part D: three chart traps ----------
+    {
+      qid: "l9d1", part: PD, fig: "fig2",
+      q: `How did Riverside's visitor numbers compare with Northside's in March 2025?`,
+      opts: [
+        { t: `About 2% more`, why: `Read the axis: Northside 20 100, Riverside 20 500. The gap is 400, and 400 ÷ 20 100 is about 0.02, so about 2% more.` },
+        { t: `About five times as many`, why: `That is what the HEIGHTS suggest: Riverside's column is five times as tall. But the axis starts at 20 000, not 0, so the columns only show the top slice of each number.` },
+        { t: `About double`, why: `Double would be about 40 000 visitors. Riverside had 20 500.` },
+        { t: `About 50% more`, why: `50% more than Northside would be about 30 000 visitors. The axis numbers show the two libraries are almost equal.` }
+      ],
+      key: 0,
+      rule: `Read the numbers on the axis, not the height of the bars. An axis that does not start at 0 can make a tiny gap look huge.`
+    },
+    {
+      qid: "l9d2", part: PD, fig: "fig3",
+      q: `What PERCENTAGE of first-year students take the bus to campus?`,
+      opts: [
+        { t: `5%`, why: `35 + 30 + 20 + 5 = 90. A pie of percentages must make 100.` },
+        { t: `10%`, why: `35 + 30 + 20 + 10 = 95. Five percent of the pie would be missing.` },
+        { t: `15%`, why: `A pie of percentages must total 100. 35 + 30 + 20 = 85, and 100 − 85 = 15.` },
+        { t: `25%`, why: `35 + 30 + 20 + 25 = 110. That is more than the whole pie.` }
+      ],
+      key: 2,
+      rule: `Percentages in a pie must total 100. Add the ones you know and subtract from 100.`
+    },
+    {
+      qid: "l9d3", part: PD, fig: "fig4",
+      q: `Which statement does Figure 4 support?`,
+      opts: [
+        { t: `The library lent out more items in total in 2024 than it did in 2014.`, why: `A percentage chart always reaches 100%. Both columns are the same height no matter how many items were lent, so the total is hidden.` },
+        { t: `E-books made up a larger SHARE of loans in 2024 than in 2014.`, why: `E-books went from 20% of loans to 40% of loans. That is a statement about shares, which is exactly what this chart shows.` },
+        { t: `Fewer printed books were borrowed in 2024 than in 2014.`, why: `The printed SHARE fell from 80% to 60%. But if the library lent many more items in 2024, the number of printed loans could still have gone up.` },
+        { t: `The number of e-book loans doubled from 2014 to 2024.`, why: `The SHARE doubled (20% to 40%). The number of e-book loans is unknown, because the chart hides the totals.` }
+      ],
+      key: 1,
+      rule: `A percentage chart shows SHARES, never totals. It cannot tell you whether the number of items went up or down.`
+    },
+
+    // ---------- Part E: writing about a chart ----------
+    {
+      qid: "l9e1", part: PE, fig: "fig1",
+      q: `You are writing a discussion of Figure 1. Which sentence is the best way to OPEN it?`,
+      opts: [
+        { t: `The graph above shows that some shops did very well over the years.`, why: `"The graph above" does not name the graphic, and "some shops did very well" is vague. Which shops? Did what?` },
+        { t: `Figure 1 proves that hair salons grew because people want services that they simply cannot buy online.`, why: `A chart never proves a cause. A reason is speculation and must be labelled as such, and it does not belong in the opening sentence.` },
+        { t: `Hair salons are one of the best businesses to open in a small town today.`, why: `No reference to the figure at all, and it is an opinion. The chart shows jobs, not which business is best to open.` },
+        { t: `As can be seen in Figure 1, employment in hair salons increased sharply between 2004 and 2024.`, why: `It names the graphic exactly (Figure 1), uses the chart's own terms (employment, hair salons, 2004 and 2024) and states what is observed (a sharp increase). Steps 1 to 3 of the five steps.` }
+      ],
+      key: 3,
+      rule: `Open with the exact name of the graphic ("As can be seen in Figure 1, ..."), use the chart's own terms, and state what you observe. Causes come later, labelled as speculation.`
+    },
+    {
+      qid: "l9e2", part: PE, fig: "fig1",
+      q: `Which sentence handles the CAUSE of the drop in internet-café jobs correctly in a written discussion of Figure 1?`,
+      opts: [
+        { t: `This may be because most people can now go online at home or on their phones, although this is only speculation.`, why: `It hedges ("may be because") and labels the cause as speculation, exactly like the workbook's model answer.` },
+        { t: `Internet cafés lost jobs because everyone now owns a smartphone.`, why: `Plausible, but stated as a fact. The chart does not show why the jobs disappeared, so the cause must be hedged and labelled.` },
+        { t: `Figure 1 shows that streaming caused the decline of internet cafés and video rental shops.`, why: `A chart never shows a cause. Figure 1 shows how many people were employed, and nothing about streaming.` },
+        { t: `Internet cafés lost jobs because of the growth of online shopping.`, why: `The title says these businesses are LEAST at risk from online shopping. This cause contradicts the figure.` }
+      ],
+      key: 0,
+      rule: `A cause is never in the chart. Hedge it (may, could, perhaps) and label it: "although this is only speculation".`
+    },
+    {
+      qid: "l9e3", part: PE,
+      stem: `A chart shows that towns with more libraries also have higher matric pass rates.`,
+      q: `Which conclusion is justified?`,
+      opts: [
+        { t: `Building more libraries causes matric pass rates to rise.`, why: `That turns a pattern into a cause. The chart only shows that the two rise together.` },
+        { t: `Higher pass rates cause towns to build more libraries.`, why: `The same mistake the other way round. Nothing in the chart shows which one acts on the other.` },
+        { t: `The chart proves nothing at all about libraries or pass rates, so it should simply be ignored.`, why: `Too far. The chart does show a real pattern; it just cannot explain it.` },
+        { t: `The two rise together, but the chart alone cannot show that one causes the other.`, why: `This is correlation: the two move together. Something else, like how wealthy a town is, could drive both. A chart alone cannot prove a cause.` }
+      ],
+      key: 3,
+      rule: `Two things rising together (correlation) is not proof that one causes the other (causation). Ask: could something else drive both?`
+    }
+  ];
+
+  // ---------- self-check ----------
+  var TOTAL = QUESTIONS.length; // 1 mark each
+  if (QUESTIONS.length !== 24 || TOTAL !== 24) {
+    document.body.insertAdjacentHTML("afterbegin", "<p style='color:var(--bad);font-weight:700'>Build check failed: " + QUESTIONS.length + " questions, " + TOTAL + " marks.</p>");
+  }
+  window.L9DATA = { QUESTIONS: QUESTIONS, FIGS: FIGS, TOTAL: TOTAL };
+
+  // ---------- chart drawing (SVG from the data arrays) ----------
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;");
+  }
+  function r1(v) { return Math.round(v * 10) / 10; }
+  function T(x, y, s, cls, anchor) {
+    return "<text x='" + r1(x) + "' y='" + r1(y) + "'" + (cls ? " class='" + cls + "'" : "") +
+      (anchor ? " text-anchor='" + anchor + "'" : "") + ">" + esc(s) + "</text>";
+  }
+  function R(x, y, w, h, cls) {
+    return "<rect x='" + r1(x) + "' y='" + r1(y) + "' width='" + r1(Math.max(0, w)) + "' height='" + r1(Math.max(0, h)) + "' class='" + cls + "'/>";
+  }
+  function L(x1, y1, x2, y2, cls) {
+    return "<line x1='" + r1(x1) + "' y1='" + r1(y1) + "' x2='" + r1(x2) + "' y2='" + r1(y2) + "' class='" + cls + "'/>";
+  }
+  function svgWrap(W, H, label, inner) {
+    return "<svg class='chart-svg' xmlns='http://www.w3.org/2000/svg' width='" + W + "' height='" + Math.ceil(H) +
+      "' viewBox='0 0 " + W + " " + Math.ceil(H) + "' role='img' aria-label='" + esc(label) + "'>" + inner + "</svg>";
+  }
+  function thou(v) { var s = String(v); return s.length > 3 ? s.slice(0, -3) + " " + s.slice(-3) : s; }
+  function legendRow(items, x, y) {
+    var s = "", cx = x;
+    items.forEach(function (it) {
+      s += R(cx, y, 14, 14, it[0]) + T(cx + 20, y + 12, it[1], "lg");
+      cx += 20 + it[1].length * 7.2 + 18;
+    });
+    return s;
+  }
+
+  // Figure 1 type: horizontal clustered bars, no value labels
+  function drawHBar(f, W) {
+    var above = W < 440;
+    var longest = 0;
+    f.rows.forEach(function (r) { longest = Math.max(longest, r[0].length); });
+    var x0 = above ? 10 : Math.ceil(longest * 6.9) + 14;
+    var x1 = W - 14;
+    var top = 34, gH = above ? 46 : 34, barH = above ? 12 : 13;
+    var axisY = top + f.rows.length * gH;
+    var H = axisY + 44;
+    var sx = function (v) { return x0 + (x1 - x0) * v / f.max; };
+    var s = legendRow([["b1", f.series[0]], ["b2", f.series[1]]], x0, 6);
+    for (var v = 0; v <= f.max; v += f.step) {
+      s += L(sx(v), top - 4, sx(v), axisY, v === 0 ? "ax" : "gl");
+      s += T(sx(v), axisY + 17, String(v), "tick", "middle");
+    }
+    s += L(x0, axisY, x1, axisY, "ax");
+    f.rows.forEach(function (r, i) {
+      var gy = top + i * gH, by;
+      if (above) {
+        s += T(x0, gy + 14, r[0], "cat");
+        by = gy + 19;
+      } else {
+        by = gy + (gH - 2 * barH - 2) / 2;
+        s += T(x0 - 8, gy + gH / 2 + 4.5, r[0], "cat", "end");
+      }
+      s += R(x0, by, sx(r[1]) - x0, barH, "b1");
+      s += R(x0, by + barH + 2, sx(r[2]) - x0, barH, "b2");
+    });
+    s += T((x0 + x1) / 2, H - 6, f.axisLabel, "axl", "middle");
+    return svgWrap(W, H, f.title, s);
+  }
+
+  // Figure 2 type: vertical columns on a y axis that need not start at 0
+  function drawCols(f, W) {
+    var x0 = 58, x1 = W - 10, top = 34, plotH = W < 440 ? 220 : 250;
+    var axisY = top + plotH, H = axisY + 30;
+    var sy = function (v) { return axisY - plotH * (v - f.min) / (f.max - f.min); };
+    var s = T(4, 16, f.axisLabel, "axl");
+    for (var v = f.min; v <= f.max; v += f.step) {
+      s += L(x0, sy(v), x1, sy(v), v === f.min ? "ax" : "gl");
+      s += T(x0 - 6, sy(v) + 4, thou(v), "tick", "end");
+    }
+    s += L(x0, top - 4, x0, axisY, "ax");
+    var slot = (x1 - x0) / f.cols.length, cw = Math.min(84, slot * 0.46);
+    f.cols.forEach(function (c, i) {
+      var cx = x0 + slot * (i + 0.5);
+      s += R(cx - cw / 2, sy(c[1]), cw, axisY - sy(c[1]), "b1");
+      s += T(cx, axisY + 19, c[0], "cat", "middle");
+    });
+    return svgWrap(W, H, f.title, s);
+  }
+
+  // Figure 3 type: pie of percentages; a null slice is drawn as the remainder and labelled "?"
+  function drawPie(f, W) {
+    var known = 0;
+    f.slices.forEach(function (sl) { if (sl[1] !== null) known += sl[1]; });
+    var side = W >= 400;
+    var rad = side ? Math.min(118, W * 0.27) : Math.min(120, W / 2 - 16);
+    var cx = side ? rad + 10 : W / 2, cy = rad + 10;
+    var a = -Math.PI / 2, s = "";
+    f.slices.forEach(function (sl, i) {
+      var val = sl[1] === null ? 100 - known : sl[1];
+      var a2 = a + val / 100 * 2 * Math.PI;
+      var p1x = cx + rad * Math.cos(a), p1y = cy + rad * Math.sin(a);
+      var p2x = cx + rad * Math.cos(a2), p2y = cy + rad * Math.sin(a2);
+      s += "<path d='M" + r1(cx) + " " + r1(cy) + " L" + r1(p1x) + " " + r1(p1y) + " A" + r1(rad) + " " + r1(rad) +
+        " 0 " + (a2 - a > Math.PI ? 1 : 0) + " 1 " + r1(p2x) + " " + r1(p2y) + " Z' class='pie p" + (i + 1) + "'/>";
+      var m = (a + a2) / 2, lr = rad * 0.62;
+      s += T(cx + lr * Math.cos(m), cy + lr * Math.sin(m) + 5, sl[1] === null ? "?" : sl[1] + "%", "pl", "middle");
+      a = a2;
+    });
+    var H;
+    if (side) {
+      var lx = cx + rad + 30, ly = cy - f.slices.length * 14;
+      f.slices.forEach(function (sl, i) {
+        s += R(lx, ly + i * 28, 16, 16, "pie p" + (i + 1)) + T(lx + 24, ly + i * 28 + 13, sl[0], "lg");
+      });
+      H = 2 * rad + 20;
+    } else {
+      var ly2 = cy + rad + 18, colW = (W - 20) / 2;
+      f.slices.forEach(function (sl, i) {
+        var lx2 = 10 + (i % 2) * colW, ly3 = ly2 + Math.floor(i / 2) * 26;
+        s += R(lx2, ly3, 16, 16, "pie p" + (i + 1)) + T(lx2 + 24, ly3 + 13, sl[0], "lg");
+      });
+      H = ly2 + Math.ceil(f.slices.length / 2) * 26 + 4;
+    }
+    return svgWrap(W, H, f.title, s);
+  }
+
+  // Figure 4 type: 100% stacked columns with the share printed in each segment
+  function drawStack(f, W) {
+    var x0 = 46, x1 = W - 10, top = 54, plotH = W < 440 ? 220 : 250;
+    var axisY = top + plotH, H = axisY + 30;
+    var sy = function (v) { return axisY - plotH * v / 100; };
+    var s = legendRow([["b1", f.parts[0]], ["b2", f.parts[1]]], 4, 4);
+    s += T(4, 40, f.axisLabel, "axl");
+    for (var v = 0; v <= 100; v += 20) {
+      s += L(x0, sy(v), x1, sy(v), v === 0 ? "ax" : "gl");
+      s += T(x0 - 6, sy(v) + 4, v + "%", "tick", "end");
+    }
+    s += L(x0, top - 4, x0, axisY, "ax");
+    var slot = (x1 - x0) / f.cols.length, cw = Math.min(96, slot * 0.5);
+    f.cols.forEach(function (c, i) {
+      var cx = x0 + slot * (i + 0.5);
+      s += R(cx - cw / 2, sy(c[1]), cw, axisY - sy(c[1]), "b1");
+      s += R(cx - cw / 2, sy(100), cw, sy(c[1]) - sy(100), "b2");
+      s += T(cx, (sy(c[1]) + axisY) / 2 + 5, c[1] + "%", "s1", "middle");
+      s += T(cx, (sy(100) + sy(c[1])) / 2 + 5, c[2] + "%", "s2", "middle");
+      s += T(cx, axisY + 19, c[0], "cat", "middle");
+    });
+    return svgWrap(W, H, f.title, s);
+  }
+
+  var DRAW = { hbar: drawHBar, cols: drawCols, pie: drawPie, stack100: drawStack };
+
+  function figureHTML(f, inner) {
+    return "<figure class='chart'><p class='figtitle'>" + esc(f.title) + "</p><div class='chart-box'>" + inner +
+      "</div><p class='figsrc'>Invented data, for practice only.</p></figure>";
+  }
+  function drawFigInto(box, fid) {
+    var f = FIGS[fid];
+    box.innerHTML = figureHTML(f, "");
+    var cb = box.querySelector(".chart-box");
+    var W = Math.max(200, Math.min(640, Math.floor(cb.clientWidth)));
+    cb.innerHTML = DRAW[f.type](f, W);
+  }
+  function staticFigure(fid) {
+    var f = FIGS[fid];
+    var W = Math.max(200, Math.min(560, el("wrapEl").clientWidth - 90));
+    return figureHTML(f, DRAW[f.type](f, W));
+  }
+
+  // keep "128 000" together on one line
+  function nb(s) { return String(s).replace(/(\d) (\d{3})\b/g, "$1 $2"); }
+
+  // ---------- state ----------
+  var idx = 0;
+  var picks = [];
+  var checked = [];
+  var startedAt = 0;
+
+  var el = function (id) { return document.getElementById(id); };
+
+  function answered(i) { return picks[i] !== null; }
+  function scoreOf(i) { var r = picks[i] === QUESTIONS[i].key; return { got: r ? 1 : 0, right: r }; }
+  function elapsedMin() { return Math.round((Date.now() - startedAt) / 60000); }
+
+  function setBar() {
+    el("barLine").innerHTML = "<span>Drill · " + QUESTIONS.length + " questions · " + TOTAL + " marks</span>";
+  }
+
+  // ---------- rendering ----------
+  function renderMap() {
+    var html = "";
+    QUESTIONS.forEach(function (q, i) {
+      var cls = [];
+      if (checked[i]) cls.push(scoreOf(i).right ? "good" : "bad");
+      if (i === idx) cls.push("cur");
+      html += "<button class='" + cls.join(" ") + "' data-i='" + i + "' aria-label='Question " + (i + 1) + "'>" + (i + 1) + "</button>";
+    });
+    el("map").innerHTML = html;
+    el("map").querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () { go(+b.getAttribute("data-i")); });
+    });
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[idx];
+    var hasFig = !!q.fig;
+    el("qPart").textContent = q.part;
+    el("qNo").textContent = "Question " + (idx + 1) + " of " + QUESTIONS.length + " · 1 mark";
+    el("qCard").classList.toggle("narrow", !hasFig);
+    el("qGrid").classList.toggle("has-fig", hasFig);
+    el("figCol").hidden = !hasFig;
+    el("figCol").innerHTML = "";
+
+    var html = "";
+    if (q.instr) html += "<p class='instr'>" + nb(q.instr) + "</p>";
+    if (q.stem) html += "<div class='stem'>" + nb(q.stem) + "</div>";
+    html += "<p class='qtext'>" + nb(q.q) + "</p>";
+    html += "<div class='opts' id='opts'>";
+    q.opts.forEach(function (o, i) {
+      html += "<button class='opt' data-i='" + i + "'><span class='letter'>" + LETTERS[i] + "</span><span class='body'>" + nb(o.t) + "</span></button>";
+    });
+    html += "</div>";
+    el("qBody").innerHTML = html;
+    if (hasFig) drawFigInto(el("figCol"), q.fig);
+
+    el("opts").querySelectorAll(".opt").forEach(function (b) {
+      b.addEventListener("click", function () { pick(+b.getAttribute("data-i")); });
+    });
+
+    el("feedback").hidden = true;
+    el("feedback").innerHTML = "";
+    if (checked[idx]) showFeedback();
+    syncButtons();
+    renderMap();
+    el("qCard").scrollIntoView({ block: "start" });
+  }
+
+  function pick(i) {
+    if (checked[idx]) return;
+    picks[idx] = i;
+    checked[idx] = true;
+    showFeedback();
+    renderMap();
+    syncButtons();
+  }
+
+  function syncButtons() {
+    el("backBtn").disabled = idx === 0;
+    el("nextBtn").textContent = idx === QUESTIONS.length - 1 ? "Show my marks" : "Next";
+  }
+
+  function showFeedback() {
+    var q = QUESTIONS[idx];
+    var sc = scoreOf(idx);
+    el("opts").querySelectorAll(".opt").forEach(function (b, j) {
+      b.disabled = true;
+      if (j === picks[idx]) b.classList.add(sc.right ? "picked-good" : "picked-bad");
+      if (!sc.right && j === q.key) b.classList.add("reveal");
+    });
+    var html = "<p class='verdict " + (sc.right ? "good" : "bad") + "'>" + (sc.right ? "Correct." : "Not this one. The answer is " + LETTERS[q.key] + ".") + "</p>";
+    html += whyList(q, picks[idx]);
+    html += "<div class='rule'>" + nb(q.rule) + "</div>";
+    el("feedback").innerHTML = html;
+    el("feedback").hidden = false;
+  }
+
+  function whyList(q, mine) {
+    var html = "<ul class='whylist'>";
+    q.opts.forEach(function (o, j) {
+      var cls = [];
+      if (j === q.key) cls.push("key");
+      if (j === mine) cls.push("mine");
+      var tags = "";
+      if (j === q.key) tags += "<span class='tag k'>Key</span>";
+      if (j === mine) tags += "<span class='tag m'" + (j === q.key ? " style='color:var(--good)'" : "") + ">Your pick</span>";
+      html += "<li class='" + cls.join(" ") + "'><b>" + LETTERS[j] + "</b>" + tags + ": " + nb(o.why) + "</li>";
+    });
+    return html + "</ul>";
+  }
+
+  function go(i) {
+    if (i < 0 || i >= QUESTIONS.length) return;
+    idx = i;
+    renderQuestion();
+  }
+
+  function next() {
+    if (idx < QUESTIONS.length - 1) { go(idx + 1); return; }
+    finish();
+  }
+
+  function finish() {
+    var minutes = elapsedMin();
+    var total = 0;
+    var answers = QUESTIONS.map(function (q, i) {
+      var sc = scoreOf(i);
+      total += sc.got;
+      return { qid: q.qid, pick: picks[i] === null ? null : LETTERS[picks[i]], right: sc.right, got: sc.got };
+    });
+    renderResults(total, minutes);
+    saveRun({ at: new Date().toISOString(), mode: "drill", score: total, total: TOTAL, minutes: minutes, answers: answers });
+  }
+
+  function renderResults(total, minutes) {
+    el("qArea").hidden = true;
+    el("startCard").hidden = true;
+
+    // missed rules first (one line per rule, with the questions it came from)
+    var order = [], byRule = {};
+    QUESTIONS.forEach(function (q, i) {
+      if (scoreOf(i).right) return;
+      if (!byRule[q.rule]) { byRule[q.rule] = []; order.push(q.rule); }
+      byRule[q.rule].push(i + 1);
+    });
+    var mr = "<p class='rev-h' style='margin-top:4px'>Rules to look at again</p>";
+    if (order.length) {
+      mr += "<ul class='missrules'>" + order.map(function (r) {
+        return "<li><span class='qn'>Q" + byRule[r].join(", Q") + ":</span> " + nb(r) + "</li>";
+      }).join("") + "</ul>";
+    } else {
+      mr += "<p class='missrules-none'>None missed this run. The habit that carries the test: find the CAPITAL word first. It is the instruction.</p>";
+    }
+    el("missRules").innerHTML = mr;
+
+    el("scoreBig").textContent = total + " / " + TOTAL;
+    el("scoreLine").textContent = Math.round(total / TOTAL * 100) + "% · " + minutes + " min";
+    var missHtml = "", hitHtml = "";
+    QUESTIONS.forEach(function (q, i) {
+      var sc = scoreOf(i);
+      if (sc.right) hitHtml += reviewCard(q, i, sc); else missHtml += reviewCard(q, i, sc);
+    });
+    el("missList").innerHTML = missHtml;
+    el("hitList").innerHTML = hitHtml;
+    el("missH").hidden = missHtml === "";
+    el("hitH").hidden = hitHtml === "";
+    el("resArea").hidden = false;
+    el("resArea").scrollIntoView({ block: "start" });
+  }
+
+  function reviewCard(q, i, sc) {
+    var html = "<div class='card rcard" + (sc.right ? "" : " miss") + "'>";
+    html += "<span class='got'>" + sc.got + " / 1</span>";
+    html += "<p class='part'>" + q.part + "</p><p class='qno'>Question " + (i + 1) + "</p>";
+    if (q.fig) {
+      var num = FIGS[q.fig].title.split(":")[0];
+      html += "<details class='text'><summary>Show " + num + " again</summary>" + staticFigure(q.fig) + "</details>";
+    }
+    if (q.stem) html += "<div class='stem'>" + nb(q.stem) + "</div>";
+    html += "<p class='qtext'>" + nb(q.q) + "</p>";
+    if (picks[i] === null) html += "<p class='why unans'>Not answered.</p>";
+    html += "<div class='opts'>";
+    q.opts.forEach(function (o, j) {
+      var cls = "opt";
+      if (j === picks[i]) cls += j === q.key ? " picked-good" : " picked-bad";
+      else if (j === q.key) cls += " reveal";
+      html += "<button class='" + cls + "' disabled><span class='letter'>" + LETTERS[j] + "</span><span class='body'>" + nb(o.t) + "</span></button>";
+    });
+    html += "</div><div class='feedback'>" + whyList(q, picks[i]);
+    html += "<div class='rule'>" + nb(q.rule) + "</div>";
+    html += "</div></div>";
+    return html;
+  }
+
+  function saveRun(record) {
+    var status = el("saveStatus");
+    if (!(window.claude && window.claude.use)) {
+      status.textContent = "Your score is not saved here, so note it down.";
+      return;
+    }
+    status.textContent = "Saving your run...";
+    window.claude.use("db").then(function (db) {
+      if (!db) {
+        status.textContent = "Your score is not saved here, so note it down.";
+        return;
+      }
+      return db.collection("runs").add(record).then(function () {
+        status.textContent = "Run saved. Your tutor can read it.";
+      });
+    }).catch(function () {
+      status.textContent = "Run not saved (connection hiccup). Your marks above still stand.";
+    });
+  }
+
+  function begin() {
+    picks = QUESTIONS.map(function () { return null; });
+    checked = QUESTIONS.map(function () { return false; });
+    idx = 0;
+    startedAt = Date.now();
+    setBar();
+    el("startCard").hidden = true;
+    el("resArea").hidden = true;
+    el("qArea").hidden = false;
+    renderQuestion();
+  }
+
+  // ---------- wiring ----------
+  el("startBtn").addEventListener("click", begin);
+  el("drillBtn").addEventListener("click", begin);
+  el("backBtn").addEventListener("click", function () { go(idx - 1); });
+  el("nextBtn").addEventListener("click", next);
+
+  var resizeT = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(function () {
+      if (!el("qArea").hidden && QUESTIONS[idx] && QUESTIONS[idx].fig) drawFigInto(el("figCol"), QUESTIONS[idx].fig);
+    }, 150);
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (el("qArea").hidden) return;
+    var t = e.target && e.target.tagName;
+    if (t === "INPUT" || t === "TEXTAREA") return;
+    var pos = ["a", "b", "c", "d"].indexOf((e.key || "").toLowerCase());
+    if (pos > -1 && !e.ctrlKey && !e.metaKey && !e.altKey) pick(pos);
+  });
+})();
+</script>

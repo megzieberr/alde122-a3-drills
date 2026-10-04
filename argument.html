@@ -1,0 +1,998 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A3 Argument Drill</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@600;700&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F8;
+    --card: #FFFFFF;
+    --ink: #22303C;
+    --muted: #5B6B78;
+    --line: #D8DFE5;
+    --accent: #0E7C7B;
+    --accent-soft: #E1F0EF;
+    --good: #2F7D4C;
+    --good-bg: #E4F3E9;
+    --bad: #C2453F;
+    --bad-bg: #FAE8E6;
+    --rule-bg: #FBF3DC;
+    --rule-ink: #7A5A12;
+    --quote-bg: #F0F3F5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141A20;
+      --card: #1D2530;
+      --ink: #E7ECF1;
+      --muted: #9AA8B4;
+      --line: #32404D;
+      --accent: #5BC6C2;
+      --accent-soft: #1E3434;
+      --good: #6CC58D;
+      --good-bg: #1E3327;
+      --bad: #E08078;
+      --bad-bg: #3A2320;
+      --rule-bg: #332B14;
+      --rule-ink: #E3C77E;
+      --quote-bg: #171E26;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141A20;
+    --card: #1D2530;
+    --ink: #E7ECF1;
+    --muted: #9AA8B4;
+    --line: #32404D;
+    --accent: #5BC6C2;
+    --accent-soft: #1E3434;
+    --good: #6CC58D;
+    --good-bg: #1E3327;
+    --bad: #E08078;
+    --bad-bg: #3A2320;
+    --rule-bg: #332B14;
+    --rule-ink: #E3C77E;
+    --quote-bg: #171E26;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Public Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 16px 16px 40px;
+    overflow-wrap: break-word;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; }
+  header { margin: 8px 0 12px; }
+  h1 {
+    font-family: "Zilla Slab", Georgia, serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0 0 2px;
+    text-wrap: balance;
+  }
+  .bar-line { color: var(--muted); font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; }
+  .bar-line b { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .map { display: flex; flex-wrap: wrap; gap: 5px; margin: 12px 0 14px; }
+  .map button {
+    width: 34px; height: 30px;
+    border-radius: 7px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    font: inherit; font-size: 0.8rem; font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+  }
+  .map button.done { background: var(--accent-soft); border-color: var(--accent-soft); color: var(--accent); }
+  .map button.cur { border-color: var(--accent); color: var(--ink); }
+  .map button.good { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+  .map button.bad { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 18px 20px;
+    margin-bottom: 14px;
+  }
+  .part {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 2px;
+  }
+  .qno {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 8px;
+  }
+  .instr { margin: 0 0 12px; font-size: 0.95rem; }
+  .qtext {
+    font-family: "Zilla Slab", Georgia, serif;
+    font-weight: 600; font-size: 1.08rem; line-height: 1.4;
+    margin: 12px 0 8px;
+  }
+  details.text {
+    background: var(--quote-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 8px 12px;
+    margin: 0 0 12px;
+    font-size: 0.93rem;
+  }
+  details.text summary {
+    cursor: pointer; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  details.text p { margin: 8px 0 0; }
+  .src-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; }
+  .src { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--card); }
+  .src h4 { margin: 0 0 4px; font-size: 0.8rem; color: var(--accent); }
+  .src div { font-size: 0.88rem; margin: 2px 0; }
+  .stmts { margin: 4px 0 8px; padding: 0; list-style: none; font-size: 0.93rem; }
+  .stmts li { padding: 6px 0; border-top: 1px dashed var(--line); }
+  .stmts li:first-child { border-top: none; }
+  .stmts b { color: var(--accent); }
+  .opts { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    width: 100%; text-align: left;
+    background: var(--card); color: var(--ink);
+    border: 1.5px solid var(--line); border-radius: 10px;
+    padding: 10px 12px;
+    font: inherit; font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt .letter {
+    flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1.5px solid var(--line); font-weight: 700; font-size: 0.85rem; margin-top: 1px;
+  }
+  .opt .body { min-width: 0; }
+  .opt .ref { display: block; margin: 0 0 6px; overflow-wrap: anywhere; }
+  .opt .ref:last-child { margin-bottom: 0; }
+  .opt.sel { border-color: var(--accent); background: var(--accent-soft); }
+  .opt.sel .letter { border-color: var(--accent); background: var(--accent); color: var(--card); }
+  .opt.picked-good { border-color: var(--good); background: var(--good-bg); }
+  .opt.picked-good .letter { border-color: var(--good); color: var(--good); }
+  .opt.picked-bad { border-color: var(--bad); background: var(--bad-bg); }
+  .opt.picked-bad .letter { border-color: var(--bad); color: var(--bad); }
+  .opt.reveal { border-color: var(--good); border-style: dashed; }
+  .opt.reveal .letter { border-color: var(--good); color: var(--good); }
+  .labels { font-size: 0.88rem; margin: 0 0 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
+  .labels span { display: inline-block; margin-right: 12px; }
+  .pair { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .pair .ex { font-size: 0.92rem; margin: 0 0 8px; }
+  .pair .ex b { color: var(--accent); }
+  .pair select {
+    width: 100%; font: inherit; font-size: 0.95rem;
+    padding: 8px 10px; border-radius: 8px;
+    border: 1.5px solid var(--line); background: var(--card); color: var(--ink);
+  }
+  .pair.good { border-color: var(--good); background: var(--good-bg); }
+  .pair.bad { border-color: var(--bad); background: var(--bad-bg); }
+  .pair .pwhy { font-size: 0.88rem; margin: 8px 0 0; }
+  .warn { font-size: 0.85rem; color: var(--rule-ink); background: var(--rule-bg); border-radius: 8px; padding: 7px 10px; margin: 6px 0 0; }
+  .feedback { margin-top: 14px; }
+  .verdict { font-family: "Zilla Slab", Georgia, serif; font-weight: 700; font-size: 1.05rem; margin: 0 0 8px; }
+  .verdict.good { color: var(--good); }
+  .verdict.bad { color: var(--bad); }
+  .why { font-size: 0.92rem; margin: 0 0 8px; }
+  .whylist { margin: 0 0 10px; padding: 0; list-style: none; font-size: 0.9rem; }
+  .whylist li { padding: 6px 8px; border-radius: 8px; margin-bottom: 4px; }
+  .whylist li.key { background: var(--good-bg); }
+  .whylist li.mine { outline: 1.5px solid var(--bad); }
+  .whylist li.mine.key { outline-color: var(--good); }
+  .whylist .tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-left: 6px; }
+  .whylist .tag.k { color: var(--good); }
+  .whylist .tag.m { color: var(--bad); }
+  .rule {
+    background: var(--rule-bg); color: var(--rule-ink);
+    border-radius: 8px; padding: 9px 12px;
+    font-size: 0.9rem; font-weight: 600;
+  }
+  .rule::before { content: "Rule: "; font-weight: 700; }
+  .note {
+    margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+    background: var(--accent-soft); color: var(--ink); font-size: 0.88rem;
+  }
+  .nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .nav .spacer { flex: 1; }
+  .btn {
+    background: var(--accent); color: var(--card);
+    border: none; border-radius: 10px;
+    padding: 10px 20px;
+    font: inherit; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+  .btn:disabled { opacity: 0.45; cursor: default; }
+  .score {
+    font-family: "Zilla Slab", Georgia, serif; font-weight: 700;
+    font-size: 2.4rem; margin: 0; font-variant-numeric: tabular-nums;
+  }
+  .scoreline { color: var(--muted); margin: 2px 0 12px; }
+  .rev-h {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin: 18px 0 8px;
+  }
+  .rcard { border-left: 4px solid var(--good); }
+  .rcard.miss { border-left-color: var(--bad); }
+  .rcard .got { float: right; font-weight: 700; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+  .rcard.miss .got { color: var(--bad); }
+  .rcard .got { color: var(--good); }
+  .save-status { color: var(--muted); font-size: 0.8rem; margin: 10px 0 0; }
+  .start p { margin: 0 0 10px; }
+  .lect { font-size: 0.92rem; background: var(--quote-bg); border-radius: 8px; padding: 10px 12px; }
+  .unans { color: var(--bad); font-weight: 700; }
+  [hidden] { display: none !important; }
+  @media (min-width: 640px) {
+    .src-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>A3 Argument Drill</h1>
+    <div class="bar-line" id="barLine">
+      <span>14 questions · 35 points</span>
+    </div>
+  </header>
+
+  <!-- START -->
+  <div class="card start" id="startCard">
+    <p class="qno">Before you start</p>
+    <div class="lect" id="lectNote"></div>
+    <p style="margin-top:12px"><b>How it works:</b> tap an answer and the explanation appears straight away (the matching sets have a <b>Check</b> button). No timer. Part 1 uses short, plain sentences; the matching sets in Part 2 get denser, like the real test.</p>
+    <div id="resumeBox" class="note" hidden></div>
+    <div class="nav">
+      <button class="btn ghost" id="drillStartBtn" hidden>Drill mode (instant feedback)</button>
+      <span class="spacer"></span>
+      <button class="btn" id="startBtn">Start the drill</button>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div id="qArea" hidden>
+    <div class="map" id="map"></div>
+    <div class="card" id="qCard">
+      <p class="part" id="qPart"></p>
+      <p class="qno" id="qNo"></p>
+      <div id="qBody"></div>
+      <div class="feedback" id="feedback" hidden></div>
+      <div class="nav">
+        <button class="btn ghost" id="backBtn">Back</button>
+        <span class="spacer"></span>
+        <button class="btn" id="checkBtn" hidden>Check</button>
+        <button class="btn" id="nextBtn">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT CONFIRM -->
+  <div class="card" id="confirmCard" hidden>
+    <p class="qno">Ready to submit?</p>
+    <p id="confirmText"></p>
+    <div class="nav">
+      <button class="btn ghost" id="confirmBack">Go back</button>
+      <span class="spacer"></span>
+      <button class="btn" id="confirmSubmit">Submit now</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resArea" hidden>
+    <div class="card">
+      <p class="qno" id="resMode">Marks</p>
+      <p class="score" id="scoreBig"></p>
+      <p class="scoreline" id="scoreLine"></p>
+      <p class="save-status" id="saveStatus"></p>
+      <div class="nav">
+        <span class="spacer"></span>
+        <button class="btn ghost" id="drillBtn">Drill rerun (instant feedback)</button>
+      </div>
+    </div>
+    <p class="rev-h" id="missH">Missed or part-marks first</p>
+    <div id="missList"></div>
+    <p class="rev-h" id="hitH">Full marks</p>
+    <div id="hitList"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var LETTERS = ["A", "B", "C", "D", "E", "F", "G"];
+  var STORE = "alde122-a3-argument-drill-v1";
+
+  var LECTURER = [
+    `<b>What this drill practises</b>: matching counter-argument, rebuttal and evidence by their signal words · shuffled paragraphs · NWU Harvard webpage and journal entries · transition sentences.`,
+    `<b>Signal words, if you get stuck:</b> someone else <i>argues / contends / maintains</i> = counter-argument · <i>However / Nevertheless / Yet, this objection...</i> answering them = rebuttal · numbers, a study, data = evidence · <i>Historically / Since... / Over the past...</i> = background · <i>Currently / At present</i> + harm = problem statement.`
+  ];
+
+  var P1 = "Part 1: Warm-up · one sentence, one job";
+  var P2 = "Part 2: Matching sets · shuffled order";
+  var P3 = "Part 3: Reference list format";
+  var P4 = "Part 4: Transition sentences";
+
+  var JOB_Q = `What job does this sentence do in an argument?`;
+  var LABEL_RULE = `Label by the sentence's JOB, not by where it sits or whether it has a source. Someone else "argues / contends / claims" = counter-argument. "However, this view / objection..." answering them = rebuttal. Numbers, a study or data backing the writer = evidence.`;
+
+  var WEB_SRC =
+    `<div class="src-grid"><div class="src"><h4>Raw data</h4>` +
+    `<div>Organisation/Author: Statistics South Africa</div>` +
+    `<div>Title of webpage: Youth unemployment in South Africa: Quarterly update</div>` +
+    `<div>URL: www.statssa.gov.za/youth-q2</div>` +
+    `<div>Date published: 2024</div>` +
+    `<div>Date accessed: 3 March 2026</div></div></div>`;
+
+  var JOURNAL_SRC =
+    `<div class="src-grid"><div class="src"><h4>Raw data</h4>` +
+    `<div>Author: Nomsa Zulu</div>` +
+    `<div>Article title: Reading for meaning in the Foundation Phase</div>` +
+    `<div>Journal title: South African Journal of Childhood Education</div>` +
+    `<div>Year: 2022 · Volume 12, issue 1 · pages 45-60</div></div></div>`;
+
+  var QUESTIONS = [
+    // ---------- Part 1: warm-up ----------
+    {
+      qid: "dr01", part: P1, pts: 1, type: "single",
+      text: [`Some researchers, such as Botha (2022), argue that homework in primary school does little to improve learners' marks.`],
+      q: JOB_Q,
+      opts: [
+        { t: `Evidence`, why: `The name and year make it look like evidence, but a source in brackets does not decide the job. Evidence backs the WRITER's claim. This sentence reports what other people think.` },
+        { t: `Background`, why: `Background is calm scene-setting nobody would dispute. "Researchers argue" is a position someone takes, so it can be disputed.` },
+        { t: `Counter-argument`, why: `"Some researchers... argue": someone else's view, which the writer is about to answer. Counter-argument, even with a citation attached.` },
+        { t: `Thesis`, why: `The thesis is the writer's own claim. Here the writer is reporting someone else's claim.` }
+      ],
+      key: 2,
+      rule: LABEL_RULE
+    },
+    {
+      qid: "dr02", part: P1, pts: 1, type: "single",
+      instr: `The sentence just before this one says: "Critics claim that school gardens take too much time away from maths and reading."`,
+      text: [`However, this concern overlooks the fact that measuring, counting and planting a garden is itself a form of maths practice.`],
+      q: JOB_Q,
+      opts: [
+        { t: `Counter-argument`, why: `"However" makes it sound like the other side talking, but the other side already spoke (the critics). This sentence ANSWERS them.` },
+        { t: `Rebuttal`, why: `"However, this concern overlooks...": the writer turns back and answers the critics. Rebuttal.` },
+        { t: `Problem statement`, why: `A problem statement describes the problem in the world. This sentence is replying to an objection.` },
+        { t: `Conclusion`, why: `It does not wrap up the argument; it answers one specific objection.` }
+      ],
+      key: 1,
+      rule: `Counter-argument = the other side speaks. Rebuttal = the writer answers them. The rebuttal comes AFTER the counter-argument and usually points back at it: "this concern", "this objection", "this view".`
+    },
+    {
+      qid: "dr03", part: P1, pts: 1, type: "single",
+      text: [`In a study of 1 200 Grade 6 learners, those who read for 20 minutes a day scored 18% higher in comprehension tests (Dlamini, 2024:31).`],
+      q: JOB_Q,
+      opts: [
+        { t: `Thesis`, why: `A thesis is a claim or position. This sentence gives a study result, not a position.` },
+        { t: `Counter-argument`, why: `Nobody is arguing against anything here. It is a finding that supports reading.` },
+        { t: `Background`, why: `Background sets the scene in general terms. A study with numbers and a source is doing more than that.` },
+        { t: `Evidence`, why: `A study, numbers (1 200 learners, 18%) and a source: this is proof backing the writer's claim. Evidence.` }
+      ],
+      key: 3,
+      rule: LABEL_RULE
+    },
+    {
+      qid: "dr04", part: P1, pts: 1, type: "single",
+      text: [`Currently, many rural clinics run out of basic medicine before the end of each month, leaving patients without treatment.`],
+      q: JOB_Q,
+      opts: [
+        { t: `Problem statement`, why: `"Currently" plus harm (patients without treatment): the problem as it stands now. Problem statement.` },
+        { t: `Background`, why: `Background is neutral scene-setting. This sentence names something going wrong right now, with a cost.` },
+        { t: `Evidence`, why: `No study, no data, no source. It describes the problem rather than proving a claim.` },
+        { t: `Rebuttal`, why: `There is no objection in front of it to answer.` }
+      ],
+      key: 0,
+      rule: `"Currently / At present / Today" + something going wrong = problem statement. "Historically / Over the past decades / Since..." + neutral facts = background.`
+    },
+    {
+      qid: "dr05", part: P1, pts: 1, type: "single",
+      text: [`Historically, public libraries have been places where people without money could still get access to books and information.`],
+      q: JOB_Q,
+      opts: [
+        { t: `Problem statement`, why: `Nothing is going wrong in this sentence. A problem statement names a problem.` },
+        { t: `Counter-argument`, why: `No one is opposing the writer here.` },
+        { t: `Background`, why: `"Historically..." and a calm fact nobody would argue with: scene-setting. Background.` },
+        { t: `Rebuttal`, why: `It is not answering any objection.` }
+      ],
+      key: 2,
+      rule: `"Currently / At present / Today" + something going wrong = problem statement. "Historically / Over the past decades / Since..." + neutral facts = background.`
+    },
+    {
+      qid: "dr06", part: P1, pts: 1, type: "single",
+      instr: `This sentence comes straight after the problem statement, and the rest of the paragraph argues for it.`,
+      text: [`Therefore, every school must set aside one period a week for learners to read books of their own choice.`],
+      q: JOB_Q,
+      opts: [
+        { t: `Conclusion`, why: `"Therefore" and "must" tempt you towards conclusion. But this sentence comes early and the rest of the paragraph argues FOR it. That is the thesis's job.` },
+        { t: `Evidence`, why: `It gives no study or data. It states what should happen.` },
+        { t: `Background`, why: `Background is neutral. "Must" takes a position.` },
+        { t: `Thesis`, why: `It is the claim the whole paragraph defends. "Must / should / therefore" can open a thesis too, especially in argument paragraphs.` }
+      ],
+      key: 3,
+      rule: `"Must", "should" and "therefore" do NOT automatically mean conclusion. Ask: does the rest of the paragraph argue FOR this sentence (thesis), or does this sentence wrap up at the very end (conclusion)? If there is no Conclusion label, it is the thesis.`
+    },
+
+    // ---------- Part 2: matching sets ----------
+    {
+      qid: "dr07", part: P2, pts: 6, type: "match",
+      instr: `The sentences in this paragraph are NOT in the usual order. Match each sentence to its job. Each label is used once.`,
+      text: [`Some parents, such as those interviewed by Mokoena (2023), argue that cellphones in class only distract learners. However, this worry ignores how phones can become learning tools when teachers set clear rules. When cellphones first appeared in South African schools, most principals simply banned them. Currently, many schools cannot afford textbooks for every learner, so learners often share one book between three. Schools should therefore allow phones in class for planned learning activities. In one Gauteng pilot project, learners who used free reading apps on their phones improved their reading scores by 12% in a single term (Pillay, 2024:8).`],
+      labels: [`Evidence`, `Thesis`, `Background`, `Rebuttal`, `Problem statement`, `Counter-argument`],
+      items: [
+        { t: `"Some parents, such as those interviewed by Mokoena (2023), argue that cellphones in class only distract learners."`, key: 5, why: `"Some parents... argue": the other side, even though it comes first and has a citation. Counter-argument.` },
+        { t: `"However, this worry ignores how phones can become learning tools when teachers set clear rules."`, key: 3, why: `"However, this worry ignores": answers the parents. Rebuttal.` },
+        { t: `"When cellphones first appeared in South African schools, most principals simply banned them."`, key: 2, why: `A past, neutral fact that sets the scene. Background, even in the middle of the paragraph.` },
+        { t: `"Currently, many schools cannot afford textbooks for every learner, so learners often share one book between three."`, key: 4, why: `"Currently" + something going wrong. Problem statement.` },
+        { t: `"Schools should therefore allow phones in class for planned learning activities."`, key: 1, why: `The writer's position that the paragraph argues for. There is no Conclusion label, so "should therefore" = thesis.` },
+        { t: `"In one Gauteng pilot project, learners who used free reading apps on their phones improved their reading scores by 12% in a single term (Pillay, 2024:8)."`, key: 0, why: `A pilot project, a figure and a source backing the writer. Evidence.` }
+      ],
+      rule: `Anchor the surest labels first: find "X argues" (counter-argument) and "However, this..." straight after it (rebuttal). Then numbers + source (evidence). The rest fall into place. Ignore the position: in shuffled paragraphs the first sentence is often NOT the background.`
+    },
+    {
+      qid: "dr08", part: P2, pts: 7, type: "match",
+      instr: `Read the paragraph carefully. Match each structural component of the argument to its sentence. Each label is used once.`,
+      text: [`Over the past two decades, South Africa's national electricity grid has struggled to keep pace with growing demand from homes, industry and public institutions. Opponents such as Venter (2024) maintain that the upfront cost of solar infrastructure is unaffordable for provincial departments already struggling to pay for basic school maintenance. Nevertheless, this objection fails to account for the steep decline in solar panel prices and the savings schools make once they no longer need to buy diesel for generators. At present, scheduled power cuts routinely interrupt teaching in thousands of schools, leaving learners without lights, computers or functioning laboratories for hours at a time. Provincial education departments should prioritise the installation of rooftop solar systems at schools as a long-term investment in uninterrupted learning. A provincial audit found that schools fitted with solar panels in 2022 reduced their annual energy spending by an average of 40% within three years (Department of Basic Education, 2025:17). Reliable power is a precondition for modern teaching; consequently, investing in solar energy today protects the learning time of future generations.`],
+      labels: [`Counter-argument`, `Conclusion`, `Background`, `Evidence`, `Thesis`, `Rebuttal`, `Problem statement`],
+      items: [
+        { t: `"Over the past two decades, South Africa's national electricity grid has struggled to keep pace with growing demand..."`, key: 2, why: `"Over the past two decades" + a general, undisputed fact. Background.` },
+        { t: `"Opponents such as Venter (2024) maintain that the upfront cost of solar infrastructure is unaffordable..."`, key: 0, why: `"Opponents... maintain": the other side. The citation does not make it evidence. Counter-argument.` },
+        { t: `"Nevertheless, this objection fails to account for the steep decline in solar panel prices..."`, key: 5, why: `"Nevertheless, this objection fails to...": answers Venter. Rebuttal. ("Nevertheless" does the same job as "However".)` },
+        { t: `"At present, scheduled power cuts routinely interrupt teaching in thousands of schools..."`, key: 6, why: `"At present" + harm to learners. Problem statement.` },
+        { t: `"Provincial education departments should prioritise the installation of rooftop solar systems at schools..."`, key: 4, why: `The writer's position that the counter-argument attacks and the evidence supports. Thesis.` },
+        { t: `"A provincial audit found that schools fitted with solar panels in 2022 reduced their annual energy spending by an average of 40%... (Department of Basic Education, 2025:17)."`, key: 3, why: `An audit, a figure and a source backing the writer. Evidence.` },
+        { t: `"Reliable power is a precondition for modern teaching; consequently, investing in solar energy today protects the learning time of future generations."`, key: 1, why: `The last sentence, looking at the big picture with "consequently". This set HAS a Conclusion label, so the "should" sentence is the thesis and this one wraps up.` }
+      ],
+      rule: `When a set has BOTH Thesis and Conclusion: the thesis is the specific claim the paragraph argues about; the conclusion wraps up at the very end, often in wider terms. Anchor counter + rebuttal first.`
+    },
+    {
+      qid: "dr09", part: P2, pts: 6, type: "match",
+      instr: `Read the paragraph carefully. Match each structural component of the argument to its sentence. Each label is used once.`,
+      text: [`Since the early 2000s, government services in South Africa have steadily moved online, from tax returns to bursary applications. Several municipal finance officials, including Ndlovu (2024), argue that free public Wi-Fi is a luxury that cash-strapped cities cannot justify while roads and water pipes remain in disrepair. Yet this position treats connectivity as an optional extra, when access to the internet now determines whether residents can apply for jobs, grants and university places. In Tshwane, residents living within range of free hotspots submitted 27% more online job applications than residents of comparable areas without access (Maseko & Smit, 2023:54). Mobile data, however, remains among the most expensive on the continent, so the poorest households are effectively locked out of these services. Metropolitan councils must therefore treat free public Wi-Fi as essential infrastructure and fund it through their regular capital budgets.`],
+      labels: [`Background`, `Thesis`, `Counter-argument`, `Problem statement`, `Rebuttal`, `Evidence`],
+      items: [
+        { t: `"Since the early 2000s, government services in South Africa have steadily moved online..."`, key: 0, why: `A time marker + a neutral fact. Background.` },
+        { t: `"Several municipal finance officials, including Ndlovu (2024), argue that free public Wi-Fi is a luxury..."`, key: 2, why: `"Officials... argue": the other side. Counter-argument.` },
+        { t: `"Yet this position treats connectivity as an optional extra..."`, key: 4, why: `"Yet this position...": answers the officials. Rebuttal. "Yet" is another turn-around word, like "However".` },
+        { t: `"In Tshwane, residents living within range of free hotspots submitted 27% more online job applications... (Maseko & Smit, 2023:54)."`, key: 5, why: `A place, a figure and a source backing the writer. Evidence.` },
+        { t: `"Mobile data, however, remains among the most expensive on the continent, so the poorest households are effectively locked out..."`, key: 3, why: `The trap: it contains "however", but it does not answer anyone's objection. It names a harm happening now (people locked out). Problem statement.` },
+        { t: `"Metropolitan councils must therefore treat free public Wi-Fi as essential infrastructure..."`, key: 1, why: `Last sentence with "must therefore", but there is no Conclusion label. It is the claim the paragraph argues for. Thesis.` }
+      ],
+      rule: `"However" alone does not make a rebuttal. A rebuttal ANSWERS the counter-argument ("this position / this objection"). "However" can also open a problem statement or a topic sentence.`
+    },
+
+    // ---------- Part 3: references ----------
+    {
+      qid: "dr10", part: P3, pts: 2, type: "single", shared: WEB_SRC, sharedLbl: "Show the raw data",
+      q: `Which reference list entry follows NWU Harvard for this webpage?`,
+      opts: [
+        { refs: [`Statistics South Africa. 2024. Youth unemployment in South Africa: Quarterly update. [Online]. Available at: www.statssa.gov.za/youth-q2 [Accessed 3 March 2026].`], why: `"[Online]. Available at: ... [Accessed ...]" is a different Harvard style, not NWU Harvard.` },
+        { refs: [`Statistics South Africa. 2024. Youth unemployment in South Africa: Quarterly update. www.statssa.gov.za/youth-q2 Date of access: 3 March 2026.`], why: `NWU Harvard: Author. Year. Title. URL, then "Date of access:" at the very end.` },
+        { refs: [`Statistics South Africa (2024). Youth unemployment in South Africa: Quarterly update. Accessed from www.statssa.gov.za/youth-q2.`], why: `Year in brackets, "Accessed from", and the date of access is missing. Other-style fingerprints.` },
+        { refs: [`Statistics South Africa. 2024. Youth unemployment in South Africa: Quarterly update. Date of access: 3 March 2026. www.statssa.gov.za/youth-q2.`], why: `Right pieces, wrong order: in NWU Harvard the URL comes first, then "Date of access:".` }
+      ],
+      key: 1,
+      rule: `NWU Harvard webpage: Author. Year. Title. URL Date of access: day month year. No "[Online]", no "Available at", no "[Accessed]".`
+    },
+    {
+      qid: "dr11", part: P3, pts: 2, type: "single", shared: JOURNAL_SRC, sharedLbl: "Show the raw data",
+      q: `Which reference list entry follows NWU Harvard for this journal article?`,
+      opts: [
+        { refs: [`Zulu, Nomsa. 2022. Reading for meaning in the Foundation Phase. <i>South African Journal of Childhood Education</i>, 12(1):45-60.`], why: `Full first name. NWU Harvard uses initials only: Zulu, N.` },
+        { refs: [`Zulu, N. (2022). Reading for meaning in the Foundation Phase. <i>South African Journal of Childhood Education</i>, 12(1), pp. 45-60.`], why: `Year in brackets and "pp." are other-style fingerprints.` },
+        { refs: [`Zulu, N. 2022. Reading for meaning in the Foundation Phase. <i>South African Journal of Childhood Education</i>, 12(1): 45-60.`], why: `Almost: but there is a space after the colon in "12(1): 45-60". NWU Harvard has no space: 12(1):45-60.` },
+        { refs: [`Zulu, N. 2022. Reading for meaning in the Foundation Phase. <i>South African Journal of Childhood Education</i>, 12(1):45-60.`], why: `Initials, bare year, italics on the journal, 12(1):45-60 with no space. Correct.` },
+        { refs: [`Zulu, N. 2022. <i>Reading for meaning in the Foundation Phase</i>. South African Journal of Childhood Education, 12(1):45-60.`], why: `Italics on the ARTICLE instead of the journal. The journal is the thing a librarian could hand you, and italics travel with the volume(issue):pages.` }
+      ],
+      key: 3,
+      rule: `NWU Harvard journal: Surname, Initial. Year. Article title. <i>Journal title</i>, volume(issue):pages. No brackets round the year, no "pp.", no space after the colon.`
+    },
+    {
+      qid: "dr12", part: P3, pts: 2, type: "single",
+      text: [`Department of Health. 2025. Clinic staffing report 2025. [Online]. Available at: www.health.gov.za/clinics [Accessed 10 June 2026].`],
+      q: `A student wrote this reference list entry. What breaks NWU Harvard?`,
+      opts: [
+        { t: `The year should be in brackets after the author: Department of Health (2025).`, why: `No. NWU Harvard puts a bare year after the author, followed by a full stop.` },
+        { t: `An organisation cannot be the author of a webpage, so the entry should start with the title.`, why: `No. When an organisation publishes the page, the organisation is the author.` },
+        { t: `The "[Online]. Available at: ... [Accessed ...]" ending: NWU Harvard ends with the URL and then "Date of access:".`, why: `Yes. That ending belongs to a different Harvard style. NWU: www.health.gov.za/clinics Date of access: 10 June 2026.` },
+        { t: `The title of a webpage must be in quotation marks.`, why: `No. NWU Harvard does not put titles in quotation marks.` }
+      ],
+      key: 2,
+      rule: `NWU Harvard webpage: Author. Year. Title. URL Date of access: day month year.`,
+      note: `Sometimes no option is perfect, for example a date of access that does not match the raw data. Then pick the one with the correct FORMAT, because format is what the question tests.`
+    },
+
+    // ---------- Part 4: transitions ----------
+    {
+      qid: "dr13", part: P4, pts: 2, type: "single",
+      text: [
+        `<b>Paragraph 1</b> Many learners in rural areas miss school regularly. Some walk more than ten kilometres each way because there is no transport. In the rainy season, flooded rivers make some routes impossible to cross. Others stay home to look after younger siblings while their parents work far away.`,
+        `<b>Paragraph 2</b> [Missing Transition Sentence]. Learners who miss many days fall behind in subjects like maths, where each topic builds on the one before. Many of them end up repeating a grade. Eventually, a large number leave school before they reach Grade 12.`
+      ],
+      q: `Which sentence works best as the transition at the top of Paragraph 2?`,
+      opts: [
+        { t: `Learners in rural areas often walk more than ten kilometres to school each day.`, why: `Only repeats a detail from Paragraph 1. It does not lead into Paragraph 2.` },
+        { t: `Many learners who repeat a grade eventually leave school before Grade 12.`, why: `Only one detail from Paragraph 2. A transition covers the whole next paragraph.` },
+        { t: `To solve this problem, the Department of Basic Education should provide free, safe bus transport for every learner who lives more than five kilometres from school.`, why: `A solution, which neither paragraph discusses. It links to nothing.` },
+        { t: `These long absences do not only keep learners out of class; they also set off a chain of academic setbacks.`, why: `"These long absences" looks BACK at Paragraph 1; "a chain of academic setbacks" looks FORWARD at all of Paragraph 2 (falling behind, repeating, leaving).` }
+      ],
+      key: 3,
+      rule: `A transition sentence looks BACK at the previous paragraph and FORWARD at the WHOLE next paragraph. Test each option: does it do both?`
+    },
+    {
+      qid: "dr14", part: P4, pts: 2, type: "single",
+      text: [
+        `<b>Paragraph 1</b> Working from home offers employees several benefits. They save time and money because they no longer travel to the office every day. Many can also choose flexible hours that suit their family responsibilities. Some find that they concentrate better without the interruptions of a busy open-plan office.`,
+        `<b>Paragraph 2</b> [Missing Transition Sentence]. Some employees feel isolated because they seldom see their colleagues in person. The line between work time and home time becomes blurred, so many people end up working longer hours. Teams also find it harder to solve problems quickly when they cannot simply walk over to a colleague's desk.`
+      ],
+      q: `Which sentence works best as the transition at the top of Paragraph 2?`,
+      opts: [
+        { t: `Despite these advantages, working from home also brings challenges for employees' well-being and for teamwork.`, why: `"Despite these advantages" looks BACK at Paragraph 1; "challenges for well-being and teamwork" looks FORWARD at all of Paragraph 2 (isolation, long hours, teamwork).` },
+        { t: `Working from home allows employees to save money that they would otherwise spend on transport and parking.`, why: `Repeats Paragraph 1. It does not turn towards the problems in Paragraph 2.` },
+        { t: `Some employees feel lonely because they hardly ever see their colleagues.`, why: `Only one detail from Paragraph 2 (isolation). It misses long hours and teamwork.` },
+        { t: `Furthermore, many companies have started to provide employees with laptops and data so that they can work from anywhere in the country.`, why: `"Furthermore" adds more of the same, but Paragraph 2 turns to problems. The content (laptops and data) is in neither paragraph.` }
+      ],
+      key: 0,
+      rule: `A transition looks BACK and FORWARD. Check the connector's direction too: Paragraph 2 turns from benefits to problems, so the transition needs a contrast word (Despite / However), not an adding word (Furthermore).`
+    }
+  ];
+
+
+  // ---------- self-check ----------
+  var TOTAL = QUESTIONS.reduce(function (s, q) { return s + q.pts; }, 0);
+  if (QUESTIONS.length !== 14 || TOTAL !== 35) {
+    document.body.insertAdjacentHTML("afterbegin", "<p style='color:red;font-weight:700'>Build check failed: " + QUESTIONS.length + " questions, " + TOTAL + " points.</p>");
+  }
+
+  // ---------- state ----------
+  var mode = "mock";      // "mock" | "drill"
+  var idx = 0;
+  var picks = [];         // single: index | null ; match: array of index|null
+  var checked = [];       // drill: whether this question was checked
+  var startedAt = 0;
+  var timerId = null;
+  var submitted = false;
+
+  var el = function (id) { return document.getElementById(id); };
+
+  function blankPicks() {
+    return QUESTIONS.map(function (q) {
+      return q.type === "match" ? q.items.map(function () { return null; }) : null;
+    });
+  }
+
+  function lsGet() { try { return JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { return null; } }
+  function lsSet(v) { try { localStorage.setItem(STORE, JSON.stringify(v)); } catch (e) {} }
+  function saveProgress() {
+    var s = lsGet() || {};
+    if (mode === "mock" && !submitted) s.inProgress = { picks: picks, startedAt: startedAt, idx: idx };
+    lsSet(s);
+  }
+
+  function answered(i) {
+    var p = picks[i];
+    if (QUESTIONS[i].type === "match") return p.every(function (x) { return x !== null; });
+    return p !== null;
+  }
+
+  function scoreOf(i) {
+    var q = QUESTIONS[i], p = picks[i];
+    if (q.type === "match") {
+      var n = 0;
+      q.items.forEach(function (it, j) { if (p[j] === it.key) n++; });
+      return { got: q.pts * n / q.items.length, right: n === q.items.length, n: n };
+    }
+    var r = p === q.key;
+    return { got: r ? q.pts : 0, right: r };
+  }
+
+  function fmt(n) { return Math.abs(n - Math.round(n)) < 0.001 ? String(Math.round(n)) : n.toFixed(1); }
+
+  function elapsedMin() { return Math.round((Date.now() - startedAt) / 60000); }
+
+  function tick() {
+    var s = Math.floor((Date.now() - startedAt) / 1000);
+    var m = Math.floor(s / 60), r = s % 60;
+    var t = el("timer");
+    if (t) t.textContent = m + ":" + (r < 10 ? "0" : "") + r;
+  }
+
+  function setBar() {
+    var html = "<span>" + (mode === "mock" ? "Mock test" : "Drill mode") + " · " + QUESTIONS.length + " questions · " + TOTAL + " points</span>";
+    if (mode === "mock") html += "<span>Time <b id='timer'>0:00</b></span>";
+    el("barLine").innerHTML = html;
+  }
+
+  // ---------- rendering ----------
+  function textBlock(q) {
+    var html = "";
+    if (q.shared) {
+      html += "<details class='text' open><summary>" + q.sharedLbl + "</summary>" + q.shared + "</details>";
+    }
+    if (q.text) {
+      html += "<details class='text' open><summary>Show the text</summary>" +
+        q.text.map(function (p) { return "<p>" + p + "</p>"; }).join("") + "</details>";
+    }
+    return html;
+  }
+
+  function stmtBlock(q) {
+    if (!q.stmts) return "";
+    var html = q.stmtIntro ? "<p class='instr'>" + q.stmtIntro + "</p>" : "";
+    html += "<ul class='stmts'>" + q.stmts.map(function (s) {
+      return "<li><b>" + s[0] + "</b> " + s[1] + "</li>";
+    }).join("") + "</ul>";
+    return html;
+  }
+
+  function optBody(o) {
+    if (o.refs) return o.refs.map(function (r) { return "<span class='ref'>" + r + "</span>"; }).join("");
+    return o.t;
+  }
+
+  function renderMap() {
+    var html = "";
+    QUESTIONS.forEach(function (q, i) {
+      var cls = [];
+      if (mode === "drill" && checked[i]) cls.push(scoreOf(i).right ? "good" : "bad");
+      else if (answered(i)) cls.push("done");
+      if (i === idx) cls.push("cur");
+      html += "<button class='" + cls.join(" ") + "' data-i='" + i + "' aria-label='Question " + (i + 1) + "'>" + (i + 1) + "</button>";
+    });
+    el("map").innerHTML = html;
+    el("map").querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () { go(+b.getAttribute("data-i")); });
+    });
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[idx];
+    el("qPart").textContent = q.part;
+    el("qNo").textContent = "Question " + (idx + 1) + " of " + QUESTIONS.length + " · " + q.pts + (q.pts === 1 ? " point" : " points");
+    var html = "";
+    if (q.instr) html += "<p class='instr'>" + q.instr + "</p>";
+    html += textBlock(q);
+    html += stmtBlock(q);
+    if (q.q) html += "<p class='qtext'>" + q.q + "</p>";
+
+    if (q.type === "single") {
+      html += "<div class='opts' id='opts'>";
+      q.opts.forEach(function (o, i) {
+        html += "<button class='opt' data-i='" + i + "'><span class='letter'>" + LETTERS[i] + "</span><span class='body'>" + optBody(o) + "</span></button>";
+      });
+      html += "</div>";
+    } else {
+      html += "<div class='labels'><b>Labels:</b> " + q.labels.map(function (l, i) {
+        return "<span>" + LETTERS[i] + ". " + l + "</span>";
+      }).join("") + "</div>";
+      q.items.forEach(function (it, j) {
+        html += "<div class='pair' id='pair" + j + "'><p class='ex'><b>" + (j + 1) + ".</b> " + it.t + "</p>" +
+          "<select data-j='" + j + "' aria-label='Label for extract " + (j + 1) + "'><option value=''>Choose a label...</option>" +
+          q.labels.map(function (l, i) { return "<option value='" + i + "'>" + LETTERS[i] + ". " + l + "</option>"; }).join("") +
+          "</select></div>";
+      });
+      html += "<p class='warn' id='dupWarn' hidden></p>";
+    }
+    el("qBody").innerHTML = html;
+
+    if (q.type === "single") {
+      el("opts").querySelectorAll(".opt").forEach(function (b) {
+        b.addEventListener("click", function () { pickSingle(+b.getAttribute("data-i")); });
+      });
+    } else {
+      el("qBody").querySelectorAll("select").forEach(function (s) {
+        var j = +s.getAttribute("data-j");
+        if (picks[idx][j] !== null) s.value = String(picks[idx][j]);
+        s.addEventListener("change", function () {
+          picks[idx][j] = s.value === "" ? null : +s.value;
+          dupCheck();
+          if (mode === "mock") saveProgress();
+          syncButtons();
+          renderMap();
+        });
+      });
+      dupCheck();
+    }
+
+    el("feedback").hidden = true;
+    el("feedback").innerHTML = "";
+    paintSelection();
+    if (mode === "drill" && checked[idx]) showDrillFeedback();
+    syncButtons();
+    renderMap();
+    el("qCard").scrollIntoView({ block: "start" });
+  }
+
+  function dupCheck() {
+    var q = QUESTIONS[idx];
+    var seen = {}, dups = [];
+    picks[idx].forEach(function (p) {
+      if (p === null) return;
+      if (seen[p]) { if (dups.indexOf(p) < 0) dups.push(p); } else seen[p] = true;
+    });
+    var w = el("dupWarn");
+    if (!w) return;
+    if (dups.length) {
+      w.textContent = "You used " + dups.map(function (d) { return LETTERS[d]; }).join(", ") + " more than once. Each label is normally used once: a doubled letter is a free error alarm.";
+      w.hidden = false;
+    } else w.hidden = true;
+  }
+
+  function paintSelection() {
+    var q = QUESTIONS[idx];
+    if (q.type !== "single") return;
+    el("opts").querySelectorAll(".opt").forEach(function (b, i) {
+      b.classList.toggle("sel", picks[idx] === i && !(mode === "drill" && checked[idx]));
+    });
+  }
+
+  function pickSingle(i) {
+    if (mode === "drill" && checked[idx]) return;
+    picks[idx] = i;
+    if (mode === "mock") {
+      paintSelection();
+      saveProgress();
+      renderMap();
+      syncButtons();
+    } else {
+      checked[idx] = true;
+      showDrillFeedback();
+      renderMap();
+      syncButtons();
+    }
+  }
+
+  function syncButtons() {
+    var q = QUESTIONS[idx];
+    el("backBtn").disabled = idx === 0;
+    var last = idx === QUESTIONS.length - 1;
+    if (mode === "mock") {
+      el("checkBtn").hidden = true;
+      el("nextBtn").textContent = last ? "Finish and submit" : "Next";
+    } else {
+      var needCheck = q.type === "match" && !checked[idx];
+      el("checkBtn").hidden = !needCheck;
+      el("checkBtn").disabled = needCheck && !answered(idx);
+      el("nextBtn").hidden = needCheck;
+      el("nextBtn").textContent = last ? "Show my marks" : "Next";
+    }
+  }
+
+  function showDrillFeedback() {
+    var q = QUESTIONS[idx];
+    var sc = scoreOf(idx);
+    var html = "";
+    if (q.type === "single") {
+      el("opts").querySelectorAll(".opt").forEach(function (b, j) {
+        b.disabled = true;
+        b.classList.remove("sel");
+        if (j === picks[idx]) b.classList.add(sc.right ? "picked-good" : "picked-bad");
+        if (!sc.right && j === q.key) b.classList.add("reveal");
+      });
+      html += "<p class='verdict " + (sc.right ? "good" : "bad") + "'>" + (sc.right ? "Correct." : "Not this one. The answer is " + LETTERS[q.key] + ".") + "</p>";
+      html += whyList(q, picks[idx]);
+    } else {
+      q.items.forEach(function (it, j) {
+        var box = el("pair" + j);
+        var ok = picks[idx][j] === it.key;
+        box.classList.add(ok ? "good" : "bad");
+        box.querySelector("select").disabled = true;
+        box.insertAdjacentHTML("beforeend", "<p class='pwhy'>" + (ok ? "Right: " : "Answer " + LETTERS[it.key] + " (" + q.labels[it.key] + "): ") + it.why + "</p>");
+      });
+      html += "<p class='verdict " + (sc.right ? "good" : "bad") + "'>" + sc.n + " of " + q.items.length + " pairs right · " + fmt(sc.got) + " / " + q.pts + "</p>";
+    }
+    html += "<div class='rule'>" + q.rule + "</div>";
+    if (q.note) html += "<div class='note'>" + q.note + "</div>";
+    el("feedback").innerHTML = html;
+    el("feedback").hidden = false;
+  }
+
+  function whyList(q, mine) {
+    var html = "";
+    if (q.stmtWhy) {
+      html += "<p class='why'><b>The statements, one by one:</b></p><ul class='whylist'>" +
+        q.stmtWhy.map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ul>";
+    }
+    html += "<ul class='whylist'>";
+    q.opts.forEach(function (o, j) {
+      var cls = [];
+      if (j === q.key) cls.push("key");
+      if (j === mine) cls.push("mine");
+      var tags = "";
+      if (j === q.key) tags += "<span class='tag k'>Key</span>";
+      if (j === mine) tags += "<span class='tag m'" + (j === q.key ? " style='color:var(--good)'" : "") + ">Your pick</span>";
+      html += "<li class='" + cls.join(" ") + "'><b>" + LETTERS[j] + "</b>" + tags + ": " + o.why + "</li>";
+    });
+    html += "</ul>";
+    return html;
+  }
+
+  function go(i) {
+    if (i < 0 || i >= QUESTIONS.length) return;
+    idx = i;
+    if (mode === "mock") saveProgress();
+    renderQuestion();
+  }
+
+  function next() {
+    if (idx < QUESTIONS.length - 1) { go(idx + 1); return; }
+    if (mode === "mock") showConfirm(); else finish();
+  }
+
+  function showConfirm() {
+    var missing = [];
+    QUESTIONS.forEach(function (q, i) { if (!answered(i)) missing.push(i + 1); });
+    el("confirmText").innerHTML = missing.length
+      ? "<span class='unans'>Not answered yet: question" + (missing.length > 1 ? "s " : " ") + missing.join(", ") + ".</span> Unanswered questions score 0. You can go back, or submit as it is."
+      : "Every question has an answer. Once you submit, the marks and the explanations appear.";
+    el("qArea").hidden = true;
+    el("confirmCard").hidden = false;
+    el("confirmCard").scrollIntoView({ block: "start" });
+  }
+
+  function finish() {
+    submitted = true;
+    if (timerId) { clearInterval(timerId); timerId = null; }
+    var minutes = elapsedMin();
+    var total = 0;
+    var answers = QUESTIONS.map(function (q, i) {
+      var sc = scoreOf(i);
+      total += sc.got;
+      var pick = q.type === "match"
+        ? picks[i].map(function (p) { return p === null ? null : LETTERS[p]; })
+        : (picks[i] === null ? null : LETTERS[picks[i]]);
+      return { qid: q.qid, pick: pick, right: sc.right, got: Math.round(sc.got * 100) / 100 };
+    });
+    var s = lsGet() || {};
+    if (mode === "mock") { delete s.inProgress; s.mockDone = true; }
+    lsSet(s);
+    renderResults(total, minutes);
+    saveRun({ at: new Date().toISOString(), mode: mode, score: Math.round(total * 100) / 100, total: TOTAL, minutes: minutes, answers: answers });
+  }
+
+  function renderResults(total, minutes) {
+    el("qArea").hidden = true;
+    el("confirmCard").hidden = true;
+    el("startCard").hidden = true;
+    el("resMode").textContent = mode === "mock" ? "Mock test marks" : "Drill marks";
+    el("scoreBig").textContent = fmt(total) + " / " + TOTAL;
+    var pct = Math.round(total / TOTAL * 100);
+    el("scoreLine").textContent = pct + "% · " + (mode === "mock" ? minutes + " min" : "drill mode") + ".";
+    var missHtml = "", hitHtml = "";
+    QUESTIONS.forEach(function (q, i) {
+      var sc = scoreOf(i);
+      var card = reviewCard(q, i, sc);
+      if (sc.got < q.pts - 0.001) missHtml += card; else hitHtml += card;
+    });
+    el("missList").innerHTML = missHtml;
+    el("hitList").innerHTML = hitHtml;
+    el("missH").hidden = missHtml === "";
+    el("hitH").hidden = hitHtml === "";
+    el("resArea").hidden = false;
+    el("resArea").scrollIntoView({ block: "start" });
+  }
+
+  function reviewCard(q, i, sc) {
+    var miss = sc.got < q.pts - 0.001;
+    var html = "<div class='card rcard" + (miss ? " miss" : "") + "'>";
+    html += "<span class='got'>" + fmt(sc.got) + " / " + q.pts + "</span>";
+    html += "<p class='part'>" + q.part + "</p><p class='qno'>Question " + (i + 1) + "</p>";
+    if (q.instr) html += "<p class='instr'>" + q.instr + "</p>";
+    var passage = (q.shared || "") + (q.text ? q.text.map(function (p) { return "<p>" + p + "</p>"; }).join("") : "");
+    if (passage) html += "<details class='text'><summary>Show the text again</summary>" + passage + "</details>";
+    if (q.stmts) html += stmtBlock(q);
+    if (q.q) html += "<p class='qtext'>" + q.q + "</p>";
+    if (q.type === "single") {
+      if (picks[i] === null) html += "<p class='why unans'>Not answered.</p>";
+      html += "<div class='opts'>";
+      q.opts.forEach(function (o, j) {
+        var cls = "opt";
+        if (j === picks[i]) cls += j === q.key ? " picked-good" : " picked-bad";
+        else if (j === q.key) cls += " reveal";
+        html += "<button class='" + cls + "' disabled><span class='letter'>" + LETTERS[j] + "</span><span class='body'>" + optBody(o) + "</span></button>";
+      });
+      html += "</div><div class='feedback'>" + whyList(q, picks[i]);
+    } else {
+      html += "<div class='labels'><b>Labels:</b> " + q.labels.map(function (l, k) { return "<span>" + LETTERS[k] + ". " + l + "</span>"; }).join("") + "</div>";
+      q.items.forEach(function (it, j) {
+        var p = picks[i][j];
+        var ok = p === it.key;
+        html += "<div class='pair " + (ok ? "good" : "bad") + "'><p class='ex'><b>" + (j + 1) + ".</b> " + it.t + "</p>" +
+          "<p class='pwhy'><b>Your pick:</b> " + (p === null ? "none" : LETTERS[p] + ". " + q.labels[p]) +
+          (ok ? "" : " · <b>Key:</b> " + LETTERS[it.key] + ". " + q.labels[it.key]) + "</p>" +
+          "<p class='pwhy'>" + it.why + "</p></div>";
+      });
+      html += "<div class='feedback'><p class='verdict " + (sc.right ? "good" : "bad") + "'>" + sc.n + " of " + q.items.length + " pairs right</p>";
+    }
+    html += "<div class='rule'>" + q.rule + "</div>";
+    if (q.note) html += "<div class='note'>" + q.note + "</div>";
+    html += "</div></div>";
+    return html;
+  }
+
+  function saveRun(record) {
+    var status = el("saveStatus");
+    if (!(window.claude && window.claude.use)) {
+      status.textContent = "Your score is not saved here, so note it down.";
+      return;
+    }
+    status.textContent = "Saving your run...";
+    window.claude.use("db").then(function (db) {
+      if (!db) {
+        status.textContent = "Your score is not saved here, so note it down.";
+        return;
+      }
+      return db.collection("runs").add(record).then(function () {
+        status.textContent = "Run saved. Your tutor can read it.";
+      });
+    }).catch(function () {
+      status.textContent = "Run not saved (connection hiccup). Your marks above still stand.";
+    });
+  }
+
+  function begin(m, resume) {
+    mode = m;
+    submitted = false;
+    picks = resume ? resume.picks : blankPicks();
+    checked = QUESTIONS.map(function () { return false; });
+    idx = resume ? resume.idx : 0;
+    startedAt = resume ? resume.startedAt : Date.now();
+    setBar();
+    if (timerId) clearInterval(timerId);
+    if (mode === "mock") { timerId = setInterval(tick, 1000); tick(); }
+    el("startCard").hidden = true;
+    el("resArea").hidden = true;
+    el("confirmCard").hidden = true;
+    el("qArea").hidden = false;
+    if (mode === "mock") saveProgress();
+    renderQuestion();
+  }
+
+  // ---------- wiring ----------
+  el("lectNote").innerHTML = LECTURER.map(function (p) { return "<p>" + p + "</p>"; }).join("");
+  el("startBtn").addEventListener("click", function () { begin("drill", null); });
+  el("drillStartBtn").addEventListener("click", function () { begin("drill", null); });
+  el("drillBtn").addEventListener("click", function () { begin("drill", null); });
+  el("backBtn").addEventListener("click", function () { go(idx - 1); });
+  el("nextBtn").addEventListener("click", next);
+  el("checkBtn").addEventListener("click", function () {
+    if (!answered(idx)) return;
+    checked[idx] = true;
+    showDrillFeedback();
+    renderMap();
+    syncButtons();
+  });
+  el("confirmBack").addEventListener("click", function () {
+    el("confirmCard").hidden = true;
+    el("qArea").hidden = false;
+    renderQuestion();
+  });
+  el("confirmSubmit").addEventListener("click", finish);
+
+  document.addEventListener("keydown", function (e) {
+    if (el("qArea").hidden) return;
+    var t = e.target && e.target.tagName;
+    if (t === "SELECT" || t === "INPUT" || t === "TEXTAREA") return;
+    var q = QUESTIONS[idx];
+    if (q.type !== "single") return;
+    var pos = ["a", "b", "c", "d", "e"].indexOf(e.key.toLowerCase());
+    if (pos > -1 && pos < q.opts.length && !e.ctrlKey && !e.metaKey && !e.altKey) pickSingle(pos);
+  });
+
+  var saved = lsGet();
+  if (saved && saved.mockDone) el("drillStartBtn").hidden = false;
+  if (saved && saved.inProgress && saved.inProgress.picks && saved.inProgress.picks.length === QUESTIONS.length) {
+    var ip = saved.inProgress;
+    var n = ip.picks.filter(function (p) { return Array.isArray(p) ? p.some(function (x) { return x !== null; }) : p !== null; }).length;
+    el("resumeBox").innerHTML = "You have a mock test in progress (" + n + " of " + QUESTIONS.length + " touched). <button class='btn' id='resumeBtn' style='margin-top:8px'>Carry on where I stopped</button>";
+    el("resumeBox").hidden = false;
+    el("startBtn").textContent = "Start over";
+    el("resumeBtn").addEventListener("click", function () { begin("mock", ip); });
+  }
+})();
+</script>
